@@ -9,10 +9,14 @@ public class PointWay : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _player;
 
+    public bool IsLiftedObject { get; private set; }
+
     public event Action DirectionCreated;
 
     public void CreatePath(InputAction.CallbackContext context)
     {
+        IsLiftedObject = false;
+
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         RaycastHit hit;
 
@@ -20,6 +24,9 @@ public class PointWay : MonoBehaviour
 
         if (hasHit)
             SetDestination(hit.point);
+
+        if (hit.collider.TryGetComponent(out LiftedObject reward))
+            IsLiftedObject = true;
     }
 
     private void SetDestination(Vector3 target)

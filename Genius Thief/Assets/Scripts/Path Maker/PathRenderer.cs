@@ -8,12 +8,13 @@ using UnityEngine.AI;
 public class PathRenderer : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _player;
+    [SerializeField] private GameObject _startPointPath;
 
     private LineRenderer _lineRenderer;
     private PointWay _pointWay;
 
     private float _initialLineWidth = 0.15f;
-    private float _initialEndLineWidth = 0.15f;
+    private float _initialEndLineWidth = 0.30f;
     private int _initialPositionCount = 0;
 
     private void Start()
@@ -39,8 +40,15 @@ public class PathRenderer : MonoBehaviour
     
     public void DrawPath()
     {
+        if (_pointWay.IsLiftedObject)
+        {
+            _lineRenderer.startColor = Color.green;
+            _lineRenderer.endColor = Color.cyan;
+        }          
+
+
         _lineRenderer.positionCount = _player.path.corners.Length;
-        _lineRenderer.SetPosition(0, _player.transform.position);
+        _lineRenderer.SetPosition(0, _startPointPath.gameObject.transform.position);
 
         if (_player.path.corners.Length < 2)
             return;
@@ -52,5 +60,6 @@ public class PathRenderer : MonoBehaviour
             _lineRenderer.SetPosition(i, pointPosition);
         }
 
+        //ResetLineRenderer();
     }
 }
