@@ -22,11 +22,11 @@ public class PointWay : MonoBehaviour
 
         bool hasHit = Physics.Raycast(ray, out hit);
 
-        if (hasHit)
-            SetDestination(hit.point);
-
         if (hit.collider.TryGetComponent(out LiftedObject reward))
             IsLiftedObject = true;
+
+        if (hasHit)
+            SetDestination(hit.point);
     }
 
     private void SetDestination(Vector3 target)

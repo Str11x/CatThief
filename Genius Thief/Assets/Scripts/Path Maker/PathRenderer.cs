@@ -8,13 +8,13 @@ using UnityEngine.AI;
 public class PathRenderer : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent _player;
-    [SerializeField] private GameObject _startPointPath;
+    [SerializeField] private float _heightStartPoint = 1;
+    [SerializeField] private float _initialLineWidth = 0.15f;
+    [SerializeField] private float _initialEndLineWidth = 0.30f;
 
     private LineRenderer _lineRenderer;
     private PointWay _pointWay;
 
-    private float _initialLineWidth = 0.15f;
-    private float _initialEndLineWidth = 0.30f;
     private int _initialPositionCount = 0;
 
     private void Start()
@@ -42,24 +42,40 @@ public class PathRenderer : MonoBehaviour
     {
         if (_pointWay.IsLiftedObject)
         {
-            _lineRenderer.startColor = Color.green;
-            _lineRenderer.endColor = Color.cyan;
-        }          
-
+         
+        }
 
         _lineRenderer.positionCount = _player.path.corners.Length;
-        _lineRenderer.SetPosition(0, _startPointPath.gameObject.transform.position);
+        _lineRenderer.SetPosition(0, new Vector3(_player.transform.position.x, 1, _player.transform.position.z));
 
         if (_player.path.corners.Length < 2)
             return;
 
-        for (int i = 1; i < _player.path.corners.Length; i++)
+        StartCoroutine(AnimateLine());
+    }
+
+    private IEnumerator AnimateLine()
+    {
+        float segmentDuration = 1f / _lineRenderer.positionCount;
+
+        for (int i = 0; i < _lineRenderer.positionCount - 1; i++)
         {
-            Vector3 pointPosition = new Vector3(_player.path.corners[i].x, _player.path.corners[i].y, _player.path.corners[i].z);
+            float startTime = Time.time;
 
-            _lineRenderer.SetPosition(i, pointPosition);
+            Vector3 startPosition = _player.path.corners[i];
+            Vector3 endPosition = _player.path.corners[i + 1];
+
+            Vector3 position = startPosition;
+            while (position != endPosition)
+            {
+                float t = (Time.time - startTime) / segmentDuration;
+                position = Vector3.Lerp(startPosition, endPosition, t);
+
+                for (int nextPoint = i + 1; nextPoint < _lineRenderer.positionCount; nextPoint++)
+                    _lineRenderer.SetPosition(nextPoint, position);
+
+                yield return null;
+            }
         }
-
-        //ResetLineRenderer();
     }
 }
