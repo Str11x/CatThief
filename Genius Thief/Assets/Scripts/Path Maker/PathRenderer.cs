@@ -1,81 +1,88 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 
-[RequireComponent(typeof(PointWay))]
 [RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(PathHandler))]
 public class PathRenderer : MonoBehaviour
 {
-    [SerializeField] private NavMeshAgent _player;
+    [SerializeField] private GridMovementAgent _pathCreator;
+    [SerializeField] private GridHolder _gridHolder;
+    [SerializeField] private ClickMarker _marker;
     [SerializeField] private float _heightStartPoint = 1;
-    [SerializeField] private float _initialLineWidth = 0.15f;
+    [SerializeField] private float _initialLineWidth = 0.30f;
     [SerializeField] private float _initialEndLineWidth = 0.30f;
 
+    private PathHandler _pathHandler;
     private LineRenderer _lineRenderer;
-    private PointWay _pointWay;
-
-    private int _initialPositionCount = 0;
+    private Coroutine _currentCoroutine;
+    private int _lastIndexInPastPath = 0;
 
     private void Start()
     {
         _lineRenderer = GetComponent<LineRenderer>();
-        ResetLineRenderer();
+        _pathHandler = GetComponent<PathHandler>();
+        _pathHandler.PointsAdded += DrawPath;
 
-        _pointWay = GetComponent<PointWay>();
-        _pointWay.DirectionCreated += DrawPath;
+        ResetLineRenderer();
     }
 
     private void OnDisable()
     {
-        _pointWay.DirectionCreated -= DrawPath;
+        _pathHandler.PointsAdded -= DrawPath;
     }
 
     private void ResetLineRenderer()
     {
         _lineRenderer.startWidth = _initialLineWidth;
         _lineRenderer.endWidth = _initialEndLineWidth;
-        _lineRenderer.positionCount = _initialPositionCount;
+        _lineRenderer.transform.position = _pathCreator.transform.position;
     }
-    
+
     public void DrawPath()
-    {
-        if (_pointWay.IsLiftedObject)
-        {
-         
+    {     
+        _lineRenderer.positionCount = _pathHandler.GetPositionCount();
+
+        if (_currentCoroutine == null)
+        {           
+            _currentCoroutine = StartCoroutine(AnimateLine());
         }
-
-        _lineRenderer.positionCount = _player.path.corners.Length;
-        _lineRenderer.SetPosition(0, new Vector3(_player.transform.position.x, 1, _player.transform.position.z));
-
-        if (_player.path.corners.Length < 2)
-            return;
-
-        StartCoroutine(AnimateLine());
+        else
+        {
+            StopCoroutine(_currentCoroutine);
+            _currentCoroutine = StartCoroutine(AnimateLine());
+        }
     }
 
     private IEnumerator AnimateLine()
     {
-        float segmentDuration = 1f / _lineRenderer.positionCount;
+        float animationDuration = 2f;
 
-        for (int i = 0; i < _lineRenderer.positionCount - 1; i++)
+        float segmentDuration = animationDuration / _lineRenderer.positionCount;
+
+        for (int i = _lastIndexInPastPath; i < _lineRenderer.positionCount - 1; i++)
         {
             float startTime = Time.time;
 
-            Vector3 startPosition = _player.path.corners[i];
-            Vector3 endPosition = _player.path.corners[i + 1];
+            Vector3 startPosition = _pathHandler.GetPathPoint(i);
+            Vector3 endPosition = _pathHandler.GetPathPoint(i + 1);
 
-            Vector3 position = startPosition;
-            while (position != endPosition)
+            Vector3 pos = startPosition;
+            while (pos != endPosition)
             {
                 float t = (Time.time - startTime) / segmentDuration;
-                position = Vector3.Lerp(startPosition, endPosition, t);
+                pos = Vector3.Lerp(startPosition, endPosition, t);
 
-                for (int nextPoint = i + 1; nextPoint < _lineRenderer.positionCount; nextPoint++)
-                    _lineRenderer.SetPosition(nextPoint, position);
+                for (int j = i + 1; j < _lineRenderer.positionCount; j++)
+                    _lineRenderer.SetPosition(j, pos);
 
                 yield return null;
             }
+
+            _lastIndexInPastPath = i;
         }
     }
 }

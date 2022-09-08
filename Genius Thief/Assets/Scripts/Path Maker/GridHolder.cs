@@ -7,35 +7,35 @@ using UnityEngine.InputSystem;
 
 public class GridHolder : MonoBehaviour
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private PathCreator _pathCreator;
+    [SerializeField] private PathHandler _pathHandler;
     [SerializeField] private int _gridWidth;
     [SerializeField] private int _gridHeight;
-    [SerializeField] private float _nodeSize; 
+    [SerializeField] private float _nodeSize;
 
     private Vector2Int _targetCoordinate;
     private Grid _grid;
     private Camera _camera;
-    private Vector3 _offset;
 
-    private int _planeHeight = 1;
     private float _offsetNumber = 0.5f;
     private float _sizeCorrection = 0.1f;
 
-    public event UnityAction<Node> SetPath;
+    public Vector3 Offset { get; private set; }
+    public int PlaneHeight { get; private set; } = 1;
 
     private void Awake()
     {
+        _pathHandler.PointPlanned += FindPath;
         _camera = Camera.main;
 
         float width = _gridWidth * _nodeSize;
         float height = _gridHeight * _nodeSize;
 
-        transform.localScale = new Vector3(width * _sizeCorrection, _planeHeight, height * _sizeCorrection);
+        transform.localScale = new Vector3(width * _sizeCorrection, PlaneHeight, height * _sizeCorrection);
 
-        _offset = transform.position - new Vector3(width, 0, height) * _offsetNumber;
+        Offset = transform.position - new Vector3(width, 0, height) * _offsetNumber;
 
-        _grid = new Grid(_gridWidth, _gridHeight, _offset, _nodeSize);
-
+        _grid = new Grid(_gridWidth, _gridHeight, Offset, _nodeSize);
     }
 
     private void OnValidate()
@@ -43,39 +43,47 @@ public class GridHolder : MonoBehaviour
         float width = _gridWidth * _nodeSize;
         float height = _gridHeight * _nodeSize;
 
-        transform.localScale = new Vector3(width * _sizeCorrection, _planeHeight, height * _sizeCorrection);
+        transform.localScale = new Vector3(width * _sizeCorrection, PlaneHeight, height * _sizeCorrection);
 
-        _offset = transform.position - new Vector3(width, 0, height) * _offsetNumber;
+        Offset = transform.position - new Vector3(width, 0, height) * _offsetNumber;
     }
 
-    public void SetNewPath(InputAction.CallbackContext context)
+    private void OnDisable()
+    {
+        _pathHandler.PointPlanned -= FindPath;
+    }
+
+    public void AddPathPoint(InputAction.CallbackContext context)
     {
         Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true)
         {
             if (hit.transform != transform)
                 return;
 
             Vector3 hitPosition = hit.point;
-            Vector3 difference = hitPosition - _offset;
+            Vector3 difference = hitPosition - Offset;
 
-            int xCoordinate = (int)(difference.x / _nodeSize);
-            int zCoordinate = (int)(difference.z / _nodeSize);
+            _targetCoordinate = new Vector2Int(CalculateCoordinate((int)difference.x), 
+                CalculateCoordinate((int)difference.z));
+            
+            Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
 
-            _targetCoordinate = new Vector2Int(xCoordinate, zCoordinate);
-            _grid.SetNewTarget(_targetCoordinate);
+            Node playerNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x), 
+                CalculateCoordinate((int)playerCoordinateDifference.z));
 
-            Vector3 playerCoordinateDifference = _player.transform.position - _offset;
-
-            int xPlayerCoordinate = (int)(playerCoordinateDifference.x / _nodeSize);
-            int zPlayerCoordinate = (int)(playerCoordinateDifference.z / _nodeSize);
-
-            Node playerNode = _grid.GetNode(xPlayerCoordinate, zPlayerCoordinate);
- 
-            SetPath?.Invoke(playerNode);
+            _pathHandler.AddPoint(_targetCoordinate, playerNode);
+            //_grid.SetNewTarget(_targetCoordinate);
+            //SetPath?.Invoke(playerNode);
         }
     }
+
+    private int CalculateCoordinate(int coordinateOnAxis)
+    {
+        return (int)(coordinateOnAxis / _nodeSize);
+    }
+  
 
     private void OnDrawGizmos()
     {
@@ -104,6 +112,11 @@ public class GridHolder : MonoBehaviour
             //Gizmos.DrawLine(node.Position, new Vector3(node.Position.x, node.Position.y + 1, node.Position.z));
             Gizmos.DrawSphere(end, 0.1f);
         }
+    }
+
+    private void FindPath(Vector2Int target)
+    {
+        _grid.SetNewTarget(target);
     }
 
     public Node GetTargetNode()

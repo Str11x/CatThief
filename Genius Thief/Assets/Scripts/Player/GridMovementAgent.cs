@@ -6,25 +6,14 @@ public class GridMovementAgent : MonoBehaviour
 {
     [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private float _speed;
-
-    [SerializeField] private FlowFieldPathfinding _pathfinding;
+    [SerializeField] private PathHandler _pathHandler;
 
     private WaitForFixedUpdate _updateTime = new WaitForFixedUpdate();
     private Coroutine _movement;
     private Node _targetNode;
     private const float _tolerance = 0.4f;
 
-    private void Start()
-    {
-        _gridHolder.SetPath += MoveToTarget;
-    }
-
-    private void OnDisable()
-    {
-        _gridHolder.SetPath -= MoveToTarget;
-    }
-
-    private void MoveToTarget(Node firstNode)
+    public void MoveToTarget(Node firstNode)
     {
         _targetNode = firstNode;
 
@@ -48,6 +37,8 @@ public class GridMovementAgent : MonoBehaviour
         {
             Vector3 target = _targetNode.Position;
 
+            _pathHandler.AddNewNodePoint(target);
+
             float distance = (target - transform.position).magnitude;
 
             if (distance < _tolerance)
@@ -57,7 +48,7 @@ public class GridMovementAgent : MonoBehaviour
                 yield return null;
             }
 
-            Vector3 direction = (target - transform.position).normalized;
+            Vector3 direction = (target - transform.position ).normalized;
             Vector3 delta = direction * (_speed * Time.deltaTime);
             transform.Translate(delta);
 
@@ -66,5 +57,7 @@ public class GridMovementAgent : MonoBehaviour
 
             yield return _updateTime;
         }
+
+        _pathHandler.GiveFinishedList();
     }
 }
