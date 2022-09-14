@@ -16,9 +16,11 @@ public class GridHolder : MonoBehaviour
     private Vector2Int _targetCoordinate;
     private Grid _grid;
     private Camera _camera;
+    private Collider _collider;
 
     private float _offsetNumber = 0.5f;
     private float _sizeCorrection = 0.1f;
+    private int _maxRadiusLoot = 5;
 
     public Vector3 Offset { get; private set; }
     public int PlaneHeight { get; private set; } = 1;
@@ -36,6 +38,8 @@ public class GridHolder : MonoBehaviour
         Offset = transform.position - new Vector3(width, 0, height) * _offsetNumber;
 
         _grid = new Grid(_gridWidth, _gridHeight, Offset, _nodeSize);
+
+        _collider = GetComponent<Collider>();
     }
 
     private void OnValidate()
@@ -59,8 +63,14 @@ public class GridHolder : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true)
         {
-            if (hit.transform != transform)
+            if (hit.transform != transform && hit.collider.TryGetComponent(out Loot loot) == false)
                 return;
+
+            if (hit.collider.TryGetComponent(out Loot lootObject))
+            {
+                MakePathToLootObject(lootObject);
+                return;
+            }
 
             Vector3 hitPosition = hit.point;
             Vector3 difference = hitPosition - Offset;
@@ -74,9 +84,38 @@ public class GridHolder : MonoBehaviour
                 CalculateCoordinate((int)playerCoordinateDifference.z));
 
             _pathHandler.AddPoint(_targetCoordinate, playerNode);
-            //_grid.SetNewTarget(_targetCoordinate);
-            //SetPath?.Invoke(playerNode);
         }
+    }
+
+    private void MakePathToLootObject(Loot loot)
+    {
+        Vector3 closestPoint = _collider.ClosestPoint(loot.transform.position);
+        
+        Vector3 nodePosition = closestPoint - Offset;
+        
+        Node pointNode = _grid.GetNode(CalculateCoordinate((int)nodePosition.x),
+                CalculateCoordinate((int)nodePosition.z));
+
+        Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
+
+        int repeat = 0;
+
+        while(pointNode.IsOccupied == true && repeat < _maxRadiusLoot)
+        {
+            Vector2Int node = new Vector2Int(CalculateCoordinate((int)nodePosition.x),
+                CalculateCoordinate((int)nodePosition.z));
+
+            Vector2Int freeNode = _grid.GetFreeNode(node);
+
+            _targetCoordinate = freeNode;
+
+            pointNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
+                CalculateCoordinate((int)playerCoordinateDifference.z));
+
+            repeat++;
+        }
+
+        _pathHandler.AddPoint(_targetCoordinate, pointNode);
     }
 
     private int CalculateCoordinate(int coordinateOnAxis)

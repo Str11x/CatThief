@@ -2,87 +2,76 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-using DG.Tweening;
 
-[RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(PathHandler))]
 public class PathRenderer : MonoBehaviour
 {
     [SerializeField] private GridMovementAgent _pathCreator;
     [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private ClickMarker _marker;
-    [SerializeField] private float _heightStartPoint = 1;
-    [SerializeField] private float _initialLineWidth = 0.30f;
-    [SerializeField] private float _initialEndLineWidth = 0.30f;
+    [SerializeField] private Line _line;
+  
+    private PathHandler _pathHandler; 
 
-    private PathHandler _pathHandler;
-    private LineRenderer _lineRenderer;
-    private Coroutine _currentCoroutine;
+    private List<Line> _lines = new List<Line>();
+    private List<ClickMarker> _markers = new List<ClickMarker>();
+    private float _height = 0.1f;
     private int _lastIndexInPastPath = 0;
 
     private void Start()
     {
-        _lineRenderer = GetComponent<LineRenderer>();
         _pathHandler = GetComponent<PathHandler>();
-        _pathHandler.PointsAdded += DrawPath;
-
-        ResetLineRenderer();
+        _pathHandler.PointsAdded += RealTimeDrawPath;
+        _pathHandler.PathCreated += CreateMarker;
+        _pathHandler.MovedToPreviousState += RedrawPath;
     }
 
     private void OnDisable()
     {
-        _pathHandler.PointsAdded -= DrawPath;
+        _pathHandler.PointsAdded -= RealTimeDrawPath;
+        _pathHandler.PathCreated -= CreateMarker;
+        _pathHandler.MovedToPreviousState -= RedrawPath;
     }
 
-    private void ResetLineRenderer()
+    public void RealTimeDrawPath()
     {
-        _lineRenderer.startWidth = _initialLineWidth;
-        _lineRenderer.endWidth = _initialEndLineWidth;
-        _lineRenderer.transform.position = _pathCreator.transform.position;
+        Vector3 newPointPosition = _pathHandler.GetPathPoint(_lastIndexInPastPath) + Vector3.up * _height;
+
+        Line lastLine = Instantiate(_line, newPointPosition, Quaternion.identity);
+
+        _lines.Add(lastLine);
+        _lastIndexInPastPath++;
     }
 
-    public void DrawPath()
-    {     
-        _lineRenderer.positionCount = _pathHandler.GetPositionCount();
-
-        if (_currentCoroutine == null)
-        {           
-            _currentCoroutine = StartCoroutine(AnimateLine());
-        }
-        else
-        {
-            StopCoroutine(_currentCoroutine);
-            _currentCoroutine = StartCoroutine(AnimateLine());
-        }
-    }
-
-    private IEnumerator AnimateLine()
+    public void RedrawPath()
     {
-        float animationDuration = 2f;
-
-        float segmentDuration = animationDuration / _lineRenderer.positionCount;
-
-        for (int i = _lastIndexInPastPath; i < _lineRenderer.positionCount - 1; i++)
+        for(int i = 0; i < _lines.Count; i++)
         {
-            float startTime = Time.time;
-
-            Vector3 startPosition = _pathHandler.GetPathPoint(i);
-            Vector3 endPosition = _pathHandler.GetPathPoint(i + 1);
-
-            Vector3 pos = startPosition;
-            while (pos != endPosition)
-            {
-                float t = (Time.time - startTime) / segmentDuration;
-                pos = Vector3.Lerp(startPosition, endPosition, t);
-
-                for (int j = i + 1; j < _lineRenderer.positionCount; j++)
-                    _lineRenderer.SetPosition(j, pos);
-
-                yield return null;
-            }
-
-            _lastIndexInPastPath = i;
+            Destroy(_lines[i].gameObject);
         }
+
+        _lines.Clear();
+        _lastIndexInPastPath = 0;
+
+        Destroy(_markers[_markers.Count - 1].gameObject);
+        _markers.RemoveAt(_markers.Count - 1);
+
+        if (_pathCreator.transform.position == _pathCreator.StartPosition)
+            return;
+
+        for (int i = 0; i < _pathHandler.GetRedrawPoints(); i++)
+        {
+                Line lastLine = Instantiate(_line, _pathHandler.GetPointFromPreviousState(i) + Vector3.up * _height, Quaternion.identity);
+                _lines.Add(lastLine);
+                _lastIndexInPastPath++;
+        }
+    }
+
+    private void CreateMarker(Vector3 markerPosition)
+    {
+        ClickMarker newMarker = Instantiate(_marker, markerPosition + Vector3.up * _height, Quaternion.identity);
+        newMarker.AddStep(_markers.Count + 1);
+
+        _markers.Add(newMarker);
     }
 }

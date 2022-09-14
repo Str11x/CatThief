@@ -12,6 +12,24 @@ public class GridMovementAgent : MonoBehaviour
     private Coroutine _movement;
     private Node _targetNode;
     private const float _tolerance = 0.4f;
+    
+    public Vector3 StartPosition { get; private set; }
+
+    private void Start()
+    {
+        StartPosition = transform.position;
+        _pathHandler.MovedToPreviousState += MoveToPreviousPathPoint;
+    }
+
+    private void OnDestroy()
+    {
+        _pathHandler.MovedToPreviousState -= MoveToPreviousPathPoint;
+    }
+
+    public void MoveToPreviousPathPoint()
+    {
+        transform.position = _pathHandler.GetPreviousPathFinishPoint();
+    }
 
     public void MoveToTarget(Node firstNode)
     {
@@ -53,11 +71,12 @@ public class GridMovementAgent : MonoBehaviour
             transform.Translate(delta);
 
             if (_gridHolder.GetTargetNode() == _targetNode)
-                _targetNode.NextNode = null;
+                _targetNode.NextNode = null;                
 
             yield return _updateTime;
         }
 
-        _pathHandler.GiveFinishedList();
+        _pathHandler.CreateFinishMarker();
+        _pathHandler.SaveNewPointsState();
     }
 }

@@ -48,7 +48,7 @@ public class FlowFieldPathfinding
         }
     }
 
-    private IEnumerable<Vector2Int> GetNeighbours(Vector2Int coordinate)
+    public IEnumerable<Vector2Int> GetNeighbours(Vector2Int coordinate)
     {
         Vector2Int rightCoordinate = coordinate + Vector2Int.right;
         Vector2Int leftCoordinate = coordinate + Vector2Int.left;
@@ -68,5 +68,53 @@ public class FlowFieldPathfinding
             yield return upCoordinate;
         if (hasDowntNode)
             yield return downCoordinate;
+    }
+
+    public Vector2Int GetFreeNeighbour(Vector2Int coordinate)
+    {
+        bool isFoundNode = false;
+        int additionalCoordinate = 1;
+
+        while(isFoundNode == false)
+        {
+            Vector2Int rightCoordinate = coordinate + new Vector2Int(additionalCoordinate, 0);
+            bool hasRightNode = rightCoordinate.x < _grid.Width && _grid.GetNode(rightCoordinate).IsOccupied != true;
+            if (hasRightNode)
+            {
+                isFoundNode = true;
+                return rightCoordinate;        
+            }
+                
+
+            Vector2Int leftCoordinate = coordinate + new Vector2Int(-additionalCoordinate, 0);
+            bool hasLeftNode = leftCoordinate.x >= 0 && _grid.GetNode(leftCoordinate).IsOccupied != true;
+            if (hasLeftNode)
+            {
+                isFoundNode = true;
+                return leftCoordinate;
+            }
+                
+
+            Vector2Int upCoordinate = coordinate + new Vector2Int(0, additionalCoordinate);
+            bool hasUpNode = upCoordinate.y < _grid.Height && _grid.GetNode(upCoordinate).IsOccupied != true;
+            if (hasUpNode)
+            {
+                isFoundNode = true;
+                return upCoordinate;
+            }
+                
+
+            Vector2Int downCoordinate = coordinate + new Vector2Int(0, -additionalCoordinate);
+            bool hasDowntNode = downCoordinate.y >= 0 && _grid.GetNode(downCoordinate).IsOccupied != true;
+            if (hasDowntNode)
+            {
+                isFoundNode = true;
+                return downCoordinate;
+            }
+
+            additionalCoordinate++;
+        }
+
+        return coordinate;
     }
 }

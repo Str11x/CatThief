@@ -81,4 +81,9 @@ public class Grid
     {
         _pathFinding.UpdateField(target);
     }
+
+    public Vector2Int GetFreeNode(Vector2Int node)
+    {
+        return _pathFinding.GetFreeNeighbour(node);
+    }
 }
