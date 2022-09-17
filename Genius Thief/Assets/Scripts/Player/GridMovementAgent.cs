@@ -76,7 +76,7 @@ public class GridMovementAgent : MonoBehaviour
             yield return _updateTime;
         }
 
-        _pathHandler.CreateFinishMarker();
-        _pathHandler.SaveNewPointsState();
+        _pathHandler.CreateFinishMarker();        
+        _pathHandler.SaveNewPointsState();        
     }
 }

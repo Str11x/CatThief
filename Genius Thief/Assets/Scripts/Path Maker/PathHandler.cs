@@ -7,6 +7,8 @@ using UnityEngine.Events;
 public class PathHandler : MonoBehaviour
 {
     [SerializeField] private GridMovementAgent _pathCreator;
+    [SerializeField] private Exit _exit;
+    [SerializeField] private PlayerMovementAgent _playerMovementAgent;
 
     private List<Vector3> _movementPoints = new List<Vector3>();
     private List<Vector3[]> _movementSteps = new List<Vector3[]>();
@@ -15,16 +17,28 @@ public class PathHandler : MonoBehaviour
     public event Action PointsAdded;
     public event Action<Vector3> PathCreated;
     public event Action MovedToPreviousState;
+    public event Action<Vector3> CreatedPathToExit;
+    public event Action StartedMove;
 
     public void AddPoint(Vector2Int newPoint, Node playerPosition)
     {
         PointPlanned?.Invoke(newPoint);
-
         _pathCreator.MoveToTarget(playerPosition);
+    }
+
+    internal void ClearRendererPoints()
+    {
+        StartedMove?.Invoke();
+    }
+
+    public void AddPathToExit(Vector3 exitPosition)
+    {
+        CreatedPathToExit?.Invoke(exitPosition);
     }
 
     public void AddNewNodePoint(Vector3 newPoint)
     {
+
         _movementPoints.Add(newPoint);
         PointsAdded?.Invoke();
     }
@@ -52,12 +66,17 @@ public class PathHandler : MonoBehaviour
 
     public void BackToPreviousState()
     {
+        int penultimateIndex = 2;
+
         if (_movementSteps.Count == 0 && _pathCreator.transform.position == _pathCreator.StartPosition || _movementSteps.Count < 0)
             return;
 
-        if(_movementSteps.Count >= 2)
+        if(_movementSteps.Count >= penultimateIndex)
         {
-            int amountDeleteElements = _movementSteps[_movementSteps.Count - 1].Length - _movementSteps[_movementSteps.Count - 2].Length;
+            Vector3[] lastArray = _movementSteps[_movementSteps.Count - 1];
+            Vector3[] penultimateArray = _movementSteps[_movementSteps.Count - penultimateIndex];
+
+            int amountDeleteElements = lastArray.Length - penultimateArray.Length;
             int startRangeDeleteIndex = _movementPoints.Count - amountDeleteElements;
             _movementPoints.RemoveRange(startRangeDeleteIndex, amountDeleteElements);
         }
@@ -88,5 +107,28 @@ public class PathHandler : MonoBehaviour
     public int GetRedrawPoints()
     {
         return _movementSteps[_movementSteps.Count - 1].Length;
+    }
+
+    public int GetAllPathPoints()
+    {
+        return _movementPoints.Count;
+    }
+
+    public Vector3 GetExitPosition()
+    {
+        return _exit.transform.position;
+    }
+
+    public bool IsPlayerMove()
+    {
+        return _playerMovementAgent.IsStartMove;
+    }
+
+    public bool IsNewPointAvailable()
+    {
+        if (_playerMovementAgent.IsStartMove || _exit.IsPlayerPlannedExit)
+            return false;
+
+        return true;
     }
 }

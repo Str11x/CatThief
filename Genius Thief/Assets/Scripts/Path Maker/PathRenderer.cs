@@ -10,6 +10,8 @@ public class PathRenderer : MonoBehaviour
     [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private ClickMarker _marker;
     [SerializeField] private Line _line;
+    //[SerializeField] private PlayerMovementAgent _player;
+    [SerializeField] private Exit _exit;
   
     private PathHandler _pathHandler; 
 
@@ -24,6 +26,7 @@ public class PathRenderer : MonoBehaviour
         _pathHandler.PointsAdded += RealTimeDrawPath;
         _pathHandler.PathCreated += CreateMarker;
         _pathHandler.MovedToPreviousState += RedrawPath;
+        _pathHandler.StartedMove += RemovePoints;
     }
 
     private void OnDisable()
@@ -31,10 +34,24 @@ public class PathRenderer : MonoBehaviour
         _pathHandler.PointsAdded -= RealTimeDrawPath;
         _pathHandler.PathCreated -= CreateMarker;
         _pathHandler.MovedToPreviousState -= RedrawPath;
+        _pathHandler.StartedMove -= RemovePoints;
+    }
+
+    private void RemovePoints()
+    {
+        for (int i = 0; i < _lines.Count; i++)
+        {
+            Destroy(_lines[i].gameObject);
+        }
+
+        _lines.Clear(); ;
     }
 
     public void RealTimeDrawPath()
     {
+        if (_pathHandler.IsPlayerMove() == true)
+            return;
+
         Vector3 newPointPosition = _pathHandler.GetPathPoint(_lastIndexInPastPath) + Vector3.up * _height;
 
         Line lastLine = Instantiate(_line, newPointPosition, Quaternion.identity);
@@ -45,12 +62,8 @@ public class PathRenderer : MonoBehaviour
 
     public void RedrawPath()
     {
-        for(int i = 0; i < _lines.Count; i++)
-        {
-            Destroy(_lines[i].gameObject);
-        }
+        RemovePoints();
 
-        _lines.Clear();
         _lastIndexInPastPath = 0;
 
         Destroy(_markers[_markers.Count - 1].gameObject);
@@ -70,6 +83,7 @@ public class PathRenderer : MonoBehaviour
     private void CreateMarker(Vector3 markerPosition)
     {
         ClickMarker newMarker = Instantiate(_marker, markerPosition + Vector3.up * _height, Quaternion.identity);
+        newMarker.SpecifyExit(_pathHandler.GetExitPosition());
         newMarker.AddStep(_markers.Count + 1);
 
         _markers.Add(newMarker);

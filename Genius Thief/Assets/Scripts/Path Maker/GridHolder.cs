@@ -28,6 +28,7 @@ public class GridHolder : MonoBehaviour
     private void Awake()
     {
         _pathHandler.PointPlanned += FindPath;
+        _pathHandler.CreatedPathToExit += AddPathPoint;
         _camera = Camera.main;
 
         float width = _gridWidth * _nodeSize;
@@ -55,13 +56,14 @@ public class GridHolder : MonoBehaviour
     private void OnDisable()
     {
         _pathHandler.PointPlanned -= FindPath;
+        _pathHandler.CreatedPathToExit -= AddPathPoint;
     }
 
-    public void AddPathPoint(InputAction.CallbackContext context)
+    public void TryAddTouchPoint(InputAction.CallbackContext context)
     {
         Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true)
+        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true && _pathHandler.IsNewPointAvailable() == true)
         {
             if (hit.transform != transform && hit.collider.TryGetComponent(out Loot loot) == false)
                 return;
@@ -72,19 +74,23 @@ public class GridHolder : MonoBehaviour
                 return;
             }
 
-            Vector3 hitPosition = hit.point;
-            Vector3 difference = hitPosition - Offset;
-
-            _targetCoordinate = new Vector2Int(CalculateCoordinate((int)difference.x), 
-                CalculateCoordinate((int)difference.z));
-            
-            Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
-
-            Node playerNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x), 
-                CalculateCoordinate((int)playerCoordinateDifference.z));
-
-            _pathHandler.AddPoint(_targetCoordinate, playerNode);
+            AddPathPoint(hit.point);
         }
+    }
+
+    private void AddPathPoint(Vector3 hitPosition)
+    {
+        Vector3 difference = hitPosition - Offset;
+
+        _targetCoordinate = new Vector2Int(CalculateCoordinate((int)difference.x),
+            CalculateCoordinate((int)difference.z));
+
+        Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
+
+        Node playerNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
+            CalculateCoordinate((int)playerCoordinateDifference.z));
+
+        _pathHandler.AddPoint(_targetCoordinate, playerNode);
     }
 
     private void MakePathToLootObject(Loot loot)
