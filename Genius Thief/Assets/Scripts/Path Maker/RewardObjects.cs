@@ -21,11 +21,6 @@ public class RewardObjects : MonoBehaviour
         _pathPointCathcer.LootWasLastPoint -= AddNewLootBoolean;
     }
 
-    public void AddNewLoot(Loot newLoot)
-    {
-        _lootedObjectsInPlan.Add(newLoot);
-    }
-
     private void AddNewLootBoolean(bool isLootInLastPoint)
     {
         _isLoot.Add(isLootInLastPoint);
@@ -49,5 +44,10 @@ public class RewardObjects : MonoBehaviour
                 _isLoot.RemoveAt(_isLoot.Count - penultimate);
             }       
         }     
+    }
+
+    public void AddNewLoot(Loot newLoot)
+    {
+        _lootedObjectsInPlan.Add(newLoot);
     }
 }

@@ -1,13 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GridMovementAgent : MonoBehaviour
 {
     [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private PathPointCatcher _pathPointCatcher;
-    [SerializeField] private float _speed;
     [SerializeField] private PathHandler _pathHandler;
+    [SerializeField] private float _speed;
 
     private WaitForFixedUpdate _updateTime = new WaitForFixedUpdate();
     private Coroutine _movement;

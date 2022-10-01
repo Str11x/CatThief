@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class FieldOfViewCalculate : MonoBehaviour
 {
-    [SerializeField] private float _radius;
     [SerializeField] [Range(0, 360)] private float _angle;
+    [SerializeField] private float _radius;
     [SerializeField] private Player _player;
     [SerializeField] private LayerMask _targetMask;
     [SerializeField] private LayerMask _obstructionMask;

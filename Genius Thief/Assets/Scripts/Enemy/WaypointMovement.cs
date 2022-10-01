@@ -3,21 +3,22 @@ using UnityEngine;
 
 public class WaypointMovement : MonoBehaviour
 {
+    private const string StopMovement = "StopMovement";
+
     [SerializeField] private Transform _path;
 
-    private float _rotationSpeed = 6f;
+    private Coroutine _movement;
     private Transform[] _points;
+    private float _rotationSpeed = 6f;
     private int _currentPoint;
-    private string _stopMovement = "StopMovement";
     private int _delayStopMovement = 1;
-    private Coroutine _movementCoroutine;
 
     public float Speed { get; private set; } = 1;
 
     private void Start()
     {
         Exit.LevelCompleted += DelayStopMovement;
-        FieldOfViewCalculate.GameIsLost += StopMovement;
+        FieldOfViewCalculate.GameIsLost += StopMovementCoroutine;
 
         _points = new Transform[_path.childCount];
 
@@ -26,32 +27,32 @@ public class WaypointMovement : MonoBehaviour
             _points[i] = _path.GetChild(i);
         }
 
-        if(_movementCoroutine != null)
+        if(_movement != null)
         {
-            StopCoroutine(_movementCoroutine);
-            _movementCoroutine = StartCoroutine(MoveToPathPoints());
+            StopCoroutine(_movement);
+            _movement = StartCoroutine(MoveToPathPoints());
         }
         else
         {
-            _movementCoroutine = StartCoroutine(MoveToPathPoints());
+            _movement = StartCoroutine(MoveToPathPoints());
         }
     }
 
     private void OnDestroy()
     {
         Exit.LevelCompleted -= DelayStopMovement;
-        FieldOfViewCalculate.GameIsLost -= StopMovement;
+        FieldOfViewCalculate.GameIsLost -= StopMovementCoroutine;
     }
 
     private void DelayStopMovement()
     {
-        Invoke(_stopMovement, _delayStopMovement);
+        Invoke(StopMovement, _delayStopMovement);
     }
 
-    private void StopMovement()
+    private void StopMovementCoroutine()
     {
-        if(_movementCoroutine != null)
-            StopCoroutine(_movementCoroutine);
+        if(_movement != null)
+            StopCoroutine(_movement);
     }
 
     private IEnumerator MoveToPathPoints()

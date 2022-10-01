@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +5,11 @@ using UnityEngine;
 public class PathRenderer : MonoBehaviour
 {
     [SerializeField] private GridMovementAgent _pathCreator;
-    [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private ClickMarker _marker;
     [SerializeField] private Line _line;
     [SerializeField] private Exit _exit;
   
     private PathHandler _pathHandler; 
-
     private List<Line> _lines = new List<Line>();
     private List<ClickMarker> _markers = new List<ClickMarker>();
     private float _height = 0.1f;
@@ -44,6 +40,15 @@ public class PathRenderer : MonoBehaviour
         }
 
         _lines.Clear(); ;
+    }
+
+    private void CreateMarker(Vector3 markerPosition)
+    {
+        ClickMarker newMarker = Instantiate(_marker, markerPosition + Vector3.up * _height, Quaternion.identity);
+        newMarker.SpecifyExit(_pathHandler.GetExitPosition());
+        newMarker.AddStep(_markers.Count + 1);
+
+        _markers.Add(newMarker);
     }
 
     public void RealTimeDrawPath()
@@ -77,14 +82,5 @@ public class PathRenderer : MonoBehaviour
                 _lines.Add(lastLine);
                 _lastIndexInPastPath++;
         }
-    }
-
-    private void CreateMarker(Vector3 markerPosition)
-    {
-        ClickMarker newMarker = Instantiate(_marker, markerPosition + Vector3.up * _height, Quaternion.identity);
-        newMarker.SpecifyExit(_pathHandler.GetExitPosition());
-        newMarker.AddStep(_markers.Count + 1);
-
-        _markers.Add(newMarker);
-    }
+    }  
 }

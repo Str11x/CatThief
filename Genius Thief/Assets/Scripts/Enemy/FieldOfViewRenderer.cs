@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(FieldOfViewCalculate))]
-public class FieldOfViewRenderer : MonoBehaviour
+public partial class FieldOfViewRenderer : MonoBehaviour
 {
-    [SerializeField] private float _meshResolution;
+    private const string ViewMesh = "View Mesh";
+
     [SerializeField] private MeshFilter _viewMeshFilter;
+    [SerializeField] private float _meshResolution;
     [SerializeField] private int _edgeResolveIterations;
     [SerializeField] private int _edgeDistanceTreshold;
 
@@ -18,7 +20,7 @@ public class FieldOfViewRenderer : MonoBehaviour
     private void Start()
     {
         _viewMesh = new Mesh();
-        _viewMesh.name = "View Mesh";
+        _viewMesh.name = ViewMesh;
         _viewMeshFilter.mesh = _viewMesh;
         _fieldOfView = GetComponent<FieldOfViewCalculate>();
         
@@ -129,33 +131,5 @@ public class FieldOfViewRenderer : MonoBehaviour
         }
 
         return new EdgeInfo(minPoint, maxPoint);
-    }
-
-    public struct ViewCastInfo
-    {
-        public bool Hit;
-        public Vector3 Point;
-        public float Distance;
-        public float Angle;
-
-        public ViewCastInfo(bool hit, Vector3 point, float distance, float angle)
-        {
-            Hit = hit;
-            Point = point;
-            Distance = distance;
-            Angle = angle;
-        }
-    }
-
-    public struct EdgeInfo
-    {
-        public Vector3 PointA;
-        public Vector3 PointB;
-
-        public EdgeInfo(Vector3 pointA, Vector3 pointB)
-        {
-            PointA = pointA;
-            PointB = pointB;
-        }
     }
 }

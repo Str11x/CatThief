@@ -4,13 +4,14 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class ClickMarker : MonoBehaviour 
 {
+    private const string LastMarkerName = "END";
+
     [SerializeField] private TextMeshProUGUI _stepRenderer;
     [SerializeField] private Material _exitMaterial;
 
     private MeshRenderer _meshRenderer;
     private Vector3 _exitPosition;
     private float _exitDistance = 0.4f;
-    private string _lastMarkerName = "END";
     private Vector3 _endButtonScale = new Vector3(1.8f, 0.02f, 1.8f);
 
     public bool IsFinishMarker { get; private set; }
@@ -24,7 +25,7 @@ public class ClickMarker : MonoBehaviour
             IsFinishMarker = true;
             _meshRenderer.material = _exitMaterial;
             transform.localScale = _endButtonScale;
-            _stepRenderer.text = _lastMarkerName;           
+            _stepRenderer.text = LastMarkerName;           
         }           
     }
 
