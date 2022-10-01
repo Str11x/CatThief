@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WaypointMovement : MonoBehaviour
@@ -9,37 +8,75 @@ public class WaypointMovement : MonoBehaviour
     private float _rotationSpeed = 6f;
     private Transform[] _points;
     private int _currentPoint;
+    private string _stopMovement = "StopMovement";
+    private int _delayStopMovement = 1;
+    private Coroutine _movementCoroutine;
 
     public float Speed { get; private set; } = 1;
 
     private void Start()
     {
+        Exit.LevelCompleted += DelayStopMovement;
+        FieldOfViewCalculate.GameIsLost += StopMovement;
+
         _points = new Transform[_path.childCount];
 
         for (int i = 0; i < _path.childCount; i++)
         {
             _points[i] = _path.GetChild(i);
         }
+
+        if(_movementCoroutine != null)
+        {
+            StopCoroutine(_movementCoroutine);
+            _movementCoroutine = StartCoroutine(MoveToPathPoints());
+        }
+        else
+        {
+            _movementCoroutine = StartCoroutine(MoveToPathPoints());
+        }
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        Transform target = _points[_currentPoint];
+        Exit.LevelCompleted -= DelayStopMovement;
+        FieldOfViewCalculate.GameIsLost -= StopMovement;
+    }
 
-        transform.position = Vector3.MoveTowards(transform.position, target.position, Speed * Time.deltaTime);
+    private void DelayStopMovement()
+    {
+        Invoke(_stopMovement, _delayStopMovement);
+    }
 
-        Vector3 direction = target.transform.position - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, _rotationSpeed * Time.deltaTime);
+    private void StopMovement()
+    {
+        if(_movementCoroutine != null)
+            StopCoroutine(_movementCoroutine);
+    }
 
-        if (transform.position == target.position)
+    private IEnumerator MoveToPathPoints()
+    {
+        while (true)
         {
-            _currentPoint++;
+            Transform target = _points[_currentPoint];
 
-            if (_currentPoint >= _points.Length)
+            transform.position = Vector3.MoveTowards(transform.position, target.position, Speed * Time.deltaTime);
+
+            Vector3 direction = target.transform.position - transform.position;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, _rotationSpeed * Time.deltaTime);
+
+            if (transform.position == target.position)
             {
-                _currentPoint = 0;
+                _currentPoint++;
+
+                if (_currentPoint >= _points.Length)
+                {
+                    _currentPoint = 0;
+                }
             }
-        }
+
+            yield return null;
+        }    
     }
 }

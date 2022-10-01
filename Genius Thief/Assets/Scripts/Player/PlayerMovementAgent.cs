@@ -18,11 +18,21 @@ public class PlayerMovementAgent : MonoBehaviour
 
     private void Start()
     {
+        FieldOfViewCalculate.GameIsLost += StopMove;
+
         transform.position = _pathCreator.transform.position;
+    }
+
+    private void OnDisable()
+    {
+        FieldOfViewCalculate.GameIsLost -= StopMove;
     }
 
     public void MoveToTargets()
     {
+        if (_pathHandler.IsInteractWithMenu())
+            return;
+
         StartedRobbery?.Invoke();
 
         if (_exit.IsPlayerPlannedExit == false)
@@ -57,5 +67,11 @@ public class PlayerMovementAgent : MonoBehaviour
 
             nextPoint++;
         }
+    }
+
+    private void StopMove()
+    {
+        if (_movement != null)
+            StopCoroutine(_movement);
     }
 }

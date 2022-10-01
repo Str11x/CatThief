@@ -5,31 +5,35 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Collider))]
 public class GridHolder : MonoBehaviour
 {
-    [SerializeField] private PathCreator _pathCreator;
-    [SerializeField] private PathHandler _pathHandler;
+    //[SerializeField] private PathCreator _pathCreator;
+    //[SerializeField] private PathHandler _pathHandler;
     [SerializeField] private int _gridWidth;
     [SerializeField] private int _gridHeight;
     [SerializeField] private float _nodeSize;
 
     private Vector2Int _targetCoordinate;
     private Grid _grid;
-    private Camera _camera;
-    private Collider _collider;
+    //private Camera _camera;
+    //private Collider _collider;
 
     private float _offsetNumber = 0.5f;
     private float _sizeCorrection = 0.1f;
-    private int _maxRadiusLoot = 5;
+    //private int _maxRadiusLoot = 5;
 
+    public float NodeSize => _nodeSize;
     public Vector3 Offset { get; private set; }
     public int PlaneHeight { get; private set; } = 1;
 
+    //public event Action <bool> LootWasLastPoint;
+
     private void Awake()
     {
-        _pathHandler.PointPlanned += FindPath;
-        _pathHandler.CreatedPathToExit += AddPathPoint;
-        _camera = Camera.main;
+        //_pathHandler.PointPlanned += FindPath;
+        //_pathHandler.CreatedPathToExit += AddPathPoint;
+        //_camera = Camera.main;
 
         float width = _gridWidth * _nodeSize;
         float height = _gridHeight * _nodeSize;
@@ -40,7 +44,7 @@ public class GridHolder : MonoBehaviour
 
         _grid = new Grid(_gridWidth, _gridHeight, Offset, _nodeSize);
 
-        _collider = GetComponent<Collider>();
+        //_collider = GetComponent<Collider>();
     }
 
     private void OnValidate()
@@ -53,81 +57,90 @@ public class GridHolder : MonoBehaviour
         Offset = transform.position - new Vector3(width, 0, height) * _offsetNumber;
     }
 
-    private void OnDisable()
+    public Grid GetGrid()
     {
-        _pathHandler.PointPlanned -= FindPath;
-        _pathHandler.CreatedPathToExit -= AddPathPoint;
+        return _grid;
     }
 
-    public void TryAddTouchPoint(InputAction.CallbackContext context)
-    {
-        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+    //private void OnDisable()
+    //{
+    //    _pathHandler.PointPlanned -= FindPath;
+    //    _pathHandler.CreatedPathToExit -= AddPathPoint;
+    //}
 
-        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true && _pathHandler.IsNewPointAvailable() == true)
-        {
-            if (hit.transform != transform && hit.collider.TryGetComponent(out Loot loot) == false)
-                return;
+    //public void TryAddTouchPoint(InputAction.CallbackContext context)
+    //{
+    //    Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-            if (hit.collider.TryGetComponent(out Loot lootObject))
-            {
-                MakePathToLootObject(lootObject);
-                return;
-            }
+    //    if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true && _pathHandler.IsNewPointAvailable() == true)
+    //    {
+    //        if (hit.transform != transform && hit.collider.TryGetComponent(out Loot loot) == false 
+    //            || hit.collider.TryGetComponent(out Loot loot2) && loot2.IsLooted == true)
+    //            return;
 
-            AddPathPoint(hit.point);
-        }
-    }
+    //        if (hit.collider.TryGetComponent(out Loot lootObject))
+    //        {
+    //            lootObject.ScheduleInPathPoints();
+    //            MakePathToLootObject(lootObject);
+    //            LootWasLastPoint(true);
+    //            return;
+    //        }
 
-    private void AddPathPoint(Vector3 hitPosition)
-    {
-        Vector3 difference = hitPosition - Offset;
+    //        LootWasLastPoint(false);
+    //        AddPathPoint(hit.point);
+    //    }
+    //}
 
-        _targetCoordinate = new Vector2Int(CalculateCoordinate((int)difference.x),
-            CalculateCoordinate((int)difference.z));
+    //private void AddPathPoint(Vector3 hitPosition)
+    //{
+    //    Vector3 difference = hitPosition - Offset;
 
-        Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
+    //    _targetCoordinate = new Vector2Int(CalculateCoordinate((int)difference.x),
+    //        CalculateCoordinate((int)difference.z));
 
-        Node playerNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
-            CalculateCoordinate((int)playerCoordinateDifference.z));
+    //    Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
 
-        _pathHandler.AddPoint(_targetCoordinate, playerNode);
-    }
+    //    Node playerNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
+    //        CalculateCoordinate((int)playerCoordinateDifference.z));
 
-    private void MakePathToLootObject(Loot loot)
-    {
-        Vector3 closestPoint = _collider.ClosestPoint(loot.transform.position);
+    //    _pathHandler.AddPoint(_targetCoordinate, playerNode);
+    //}
+
+    //private void MakePathToLootObject(Loot loot)
+    //{
+    //    Vector3 closestPoint = _collider.ClosestPoint(loot.transform.position);
         
-        Vector3 nodePosition = closestPoint - Offset;
+    //    Vector3 nodePosition = closestPoint - Offset;
         
-        Node pointNode = _grid.GetNode(CalculateCoordinate((int)nodePosition.x),
-                CalculateCoordinate((int)nodePosition.z));
+    //    Node pointNode = _grid.GetNode(CalculateCoordinate((int)nodePosition.x),
+    //            CalculateCoordinate((int)nodePosition.z));
 
-        Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
+    //    Vector3 playerCoordinateDifference = _pathCreator.transform.position - Offset;
 
-        int repeat = 0;
+    //    int repeat = 0;
 
-        while(pointNode.IsOccupied == true && repeat < _maxRadiusLoot)
-        {
-            Vector2Int node = new Vector2Int(CalculateCoordinate((int)nodePosition.x),
-                CalculateCoordinate((int)nodePosition.z));
+    //    while(pointNode.IsOccupied == true && repeat < _maxRadiusLoot)
+    //    {
+    //        Vector2Int node = new Vector2Int(CalculateCoordinate((int)nodePosition.x),
+    //            CalculateCoordinate((int)nodePosition.z));
 
-            Vector2Int freeNode = _grid.GetFreeNode(node);
+    //        Vector2Int freeNode = _grid.GetNearestFreeNode(node);
 
-            _targetCoordinate = freeNode;
+    //        _targetCoordinate = freeNode;
 
-            pointNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
-                CalculateCoordinate((int)playerCoordinateDifference.z));
+    //        pointNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
+    //            CalculateCoordinate((int)playerCoordinateDifference.z));
 
-            repeat++;
-        }
+    //        repeat++;
+    //    }
 
-        _pathHandler.AddPoint(_targetCoordinate, pointNode);
-    }
+    //    _pathHandler.AddPoint(_targetCoordinate, pointNode);
+    //}
 
-    private int CalculateCoordinate(int coordinateOnAxis)
-    {
-        return (int)(coordinateOnAxis / _nodeSize);
-    }
+    //private int CalculateCoordinate(int coordinateOnAxis)
+    //{
+    //    return (int)(coordinateOnAxis / _nodeSize);
+    //}
   
 
     private void OnDrawGizmos()
@@ -159,13 +172,13 @@ public class GridHolder : MonoBehaviour
         }
     }
 
-    private void FindPath(Vector2Int target)
-    {
-        _grid.SetNewTarget(target);
-    }
+    //private void FindPath(Vector2Int target)
+    //{
+    //    _grid.SetNewTarget(target);
+    //}
 
-    public Node GetTargetNode()
-    {
-        return _grid.GetNode(_targetCoordinate);
-    }
+    //public Node GetTargetNode()
+    //{
+    //    return _grid.GetNode(_targetCoordinate);
+    //}
 }

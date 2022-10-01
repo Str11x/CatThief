@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +8,7 @@ public class Grid
 
     private int _width;
     private int _height;
+    private float _heightGround = 1;
     private float _offsetNumber = 0.5f;
     private float _obstacleDistance = 0.25f;
 
@@ -67,7 +67,7 @@ public class Grid
 
     private bool IsObstacle(Node node)
     {
-        if (Physics.Raycast(node.Position, new Vector3(node.Position.x, node.Position.y + 1, node.Position.z),
+        if (Physics.Raycast(node.Position, new Vector3(node.Position.x, node.Position.y + _heightGround, node.Position.z),
             out RaycastHit hit, _obstacleDistance))
         {
             if(hit.collider.TryGetComponent<Obstacle>(out Obstacle obstacle))
@@ -82,8 +82,8 @@ public class Grid
         _pathFinding.UpdateField(target);
     }
 
-    public Vector2Int GetFreeNode(Vector2Int node)
+    public Vector2Int GetNearestFreeNode(Vector2Int node)
     {
-        return _pathFinding.GetFreeNeighbour(node);
+        return _pathFinding.GetNearestFreeNeighbour(node);
     }
 }

@@ -19,6 +19,8 @@ public class FieldOfViewCalculate : MonoBehaviour
     public float Angle => _angle;
     public Player Player => _player;
 
+    public static event Action GameIsLost;
+
     private void Start()
     {
         StartCoroutine(SearchPlayer());
@@ -31,7 +33,7 @@ public class FieldOfViewCalculate : MonoBehaviour
             yield return null;
             TryGetPlayerInView();
             if (CanSeePlayer)
-                Time.timeScale = 0;
+                GameIsLost?.Invoke();
         }
     }
 

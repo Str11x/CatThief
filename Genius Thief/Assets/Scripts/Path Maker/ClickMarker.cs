@@ -34,9 +34,9 @@ public class ClickMarker : MonoBehaviour
 
         if(int.TryParse(_stepRenderer.text, out int result))
         {
-            if (other.TryGetComponent(out Player player) && (player.PointsCount + nextPoint) == result)
+            if (other.TryGetComponent(out Player player) && (player.MarkersCount + nextPoint) == result)
             {
-                player.AddCount();
+                player.AddMarkerCount();
                 _meshRenderer.material = _exitMaterial;
             }
         }             

@@ -9,6 +9,7 @@ public class PathHandler : MonoBehaviour
     [SerializeField] private GridMovementAgent _pathCreator;
     [SerializeField] private Exit _exit;
     [SerializeField] private PlayerMovementAgent _playerMovementAgent;
+    [SerializeField] private TimeService _menu;
 
     private List<Vector3> _movementPoints = new List<Vector3>();
     private List<Vector3[]> _movementSteps = new List<Vector3[]>();
@@ -68,7 +69,8 @@ public class PathHandler : MonoBehaviour
     {
         int penultimateIndex = 2;
 
-        if (_movementSteps.Count == 0 && _pathCreator.transform.position == _pathCreator.StartPosition || _movementSteps.Count < 0)
+        if (_movementSteps.Count == 0 && _pathCreator.transform.position == _pathCreator.StartPosition || _movementSteps.Count < 0
+            || _menu.IsInteractWithMenu)
             return;
 
         if(_movementSteps.Count >= penultimateIndex)
@@ -126,9 +128,14 @@ public class PathHandler : MonoBehaviour
 
     public bool IsNewPointAvailable()
     {
-        if (_playerMovementAgent.IsStartMove || _exit.IsPlayerPlannedExit)
+        if (_playerMovementAgent.IsStartMove || _exit.IsPlayerPlannedExit || _menu.IsInteractWithMenu)
             return false;
 
         return true;
+    }
+
+    public bool IsInteractWithMenu()
+    {
+        return _menu.IsInteractWithMenu;
     }
 }

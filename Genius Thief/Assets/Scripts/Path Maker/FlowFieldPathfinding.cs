@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ public class FlowFieldPathfinding
 {
     private Grid _grid;
     private Vector2Int _target;
-
     private float _pathWeight = 1;
 
     public FlowFieldPathfinding (Grid grid)
@@ -19,9 +17,8 @@ public class FlowFieldPathfinding
         _target = target;
 
         foreach (Node node in _grid.EnumerateAllNodes())
-        {
             node.ResetWeight();
-        }
+
 
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
@@ -70,49 +67,34 @@ public class FlowFieldPathfinding
             yield return downCoordinate;
     }
 
-    public Vector2Int GetFreeNeighbour(Vector2Int coordinate)
+    public Vector2Int GetNearestFreeNeighbour(Vector2Int coordinate)
     {
-        bool isFoundNode = false;
-        int additionalCoordinate = 1;
+        int distance = 1;
+        int maxinumDistance = 30;
 
-        while(isFoundNode == false)
+        while(distance < maxinumDistance)
         {
-            Vector2Int rightCoordinate = coordinate + new Vector2Int(additionalCoordinate, 0);
+            Vector2Int rightCoordinate = coordinate + new Vector2Int(distance, 0);
             bool hasRightNode = rightCoordinate.x < _grid.Width && _grid.GetNode(rightCoordinate).IsOccupied != true;
             if (hasRightNode)
-            {
-                isFoundNode = true;
-                return rightCoordinate;        
-            }
-                
+                return rightCoordinate;                    
 
-            Vector2Int leftCoordinate = coordinate + new Vector2Int(-additionalCoordinate, 0);
+            Vector2Int leftCoordinate = coordinate + new Vector2Int(-distance, 0);
             bool hasLeftNode = leftCoordinate.x >= 0 && _grid.GetNode(leftCoordinate).IsOccupied != true;
             if (hasLeftNode)
-            {
-                isFoundNode = true;
-                return leftCoordinate;
-            }
-                
+                return leftCoordinate;              
 
-            Vector2Int upCoordinate = coordinate + new Vector2Int(0, additionalCoordinate);
+            Vector2Int upCoordinate = coordinate + new Vector2Int(0, distance);
             bool hasUpNode = upCoordinate.y < _grid.Height && _grid.GetNode(upCoordinate).IsOccupied != true;
             if (hasUpNode)
-            {
-                isFoundNode = true;
-                return upCoordinate;
-            }
-                
+                return upCoordinate;               
 
-            Vector2Int downCoordinate = coordinate + new Vector2Int(0, -additionalCoordinate);
+            Vector2Int downCoordinate = coordinate + new Vector2Int(0, -distance);
             bool hasDowntNode = downCoordinate.y >= 0 && _grid.GetNode(downCoordinate).IsOccupied != true;
             if (hasDowntNode)
-            {
-                isFoundNode = true;
                 return downCoordinate;
-            }
 
-            additionalCoordinate++;
+            distance++;
         }
 
         return coordinate;

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridMovementAgent : MonoBehaviour
 {
     [SerializeField] private GridHolder _gridHolder;
+    [SerializeField] private PathPointCatcher _pathPointCatcher;
     [SerializeField] private float _speed;
     [SerializeField] private PathHandler _pathHandler;
 
@@ -70,7 +71,7 @@ public class GridMovementAgent : MonoBehaviour
             Vector3 delta = direction * (_speed * Time.deltaTime);
             transform.Translate(delta);
 
-            if (_gridHolder.GetTargetNode() == _targetNode)
+            if (_pathPointCatcher.GetTargetNode() == _targetNode)
                 _targetNode.NextNode = null;                
 
             yield return _updateTime;
