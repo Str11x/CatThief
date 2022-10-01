@@ -7,18 +7,18 @@ public class RewardObjects : MonoBehaviour
     [SerializeField] private PathPointCatcher _pathPointCathcer;
 
     private List<Loot> _lootedObjectsInPlan = new List<Loot>();
-    private List<bool> _isLastPointInLoot = new List<bool>();
+    private List<bool> _isLoot = new List<bool>();
 
     private void Start()
     {
         _pathHandler.MovedToPreviousState += RemoveLastLoot;
-        _pathPointCathcer.LootWasLastPoint += AddNewLootBoolPoint;
+        _pathPointCathcer.LootWasLastPoint += AddNewLootBoolean;
     }
 
     private void OnDisable()
     {
         _pathHandler.MovedToPreviousState -= RemoveLastLoot;
-        _pathPointCathcer.LootWasLastPoint -= AddNewLootBoolPoint;
+        _pathPointCathcer.LootWasLastPoint -= AddNewLootBoolean;
     }
 
     public void AddNewLoot(Loot newLoot)
@@ -26,27 +26,27 @@ public class RewardObjects : MonoBehaviour
         _lootedObjectsInPlan.Add(newLoot);
     }
 
-    private void AddNewLootBoolPoint(bool isLootInLastPoint)
+    private void AddNewLootBoolean(bool isLootInLastPoint)
     {
-        _isLastPointInLoot.Add(isLootInLastPoint);
+        _isLoot.Add(isLootInLastPoint);
     }
 
-    public void RemoveLastLoot()
+    private void RemoveLastLoot()
     {
         if(_lootedObjectsInPlan != null)
         {
             int penultimate = 1;
             int lastLoot = _lootedObjectsInPlan.Count - penultimate;
 
-            if(_isLastPointInLoot[lastLoot] == true)
+            if(_isLoot[_isLoot.Count - penultimate] == true)
             {
                 _lootedObjectsInPlan[lastLoot].DeleteFromSchedulePathPoints();
                 _lootedObjectsInPlan.RemoveAt(lastLoot);
-                _isLastPointInLoot.RemoveAt(lastLoot);
+                _isLoot.RemoveAt(_isLoot.Count - penultimate);
             }
             else
             {
-                _isLastPointInLoot.RemoveAt(lastLoot);
+                _isLoot.RemoveAt(_isLoot.Count - penultimate);
             }       
         }     
     }

@@ -19,11 +19,10 @@ public class FlowFieldPathfinding
         foreach (Node node in _grid.EnumerateAllNodes())
             node.ResetWeight();
 
-
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
         queue.Enqueue(_target);
-        _grid.GetNode(_target).PathWeight = 0;
+        _grid.GetNode(_target).SetWeight(0);
 
         while (queue.Count > 0)
         {
@@ -37,8 +36,8 @@ public class FlowFieldPathfinding
 
                 if(weightToTarget < neighbourNode.PathWeight)
                 {
-                    neighbourNode.NextNode = currentNode;
-                    neighbourNode.PathWeight = weightToTarget;
+                    neighbourNode.SetNextNode(currentNode);
+                    neighbourNode.SetWeight(weightToTarget);
                     queue.Enqueue(neighbour);
                 }
             }
@@ -70,9 +69,9 @@ public class FlowFieldPathfinding
     public Vector2Int GetNearestFreeNeighbour(Vector2Int coordinate)
     {
         int distance = 1;
-        int maxinumDistance = 30;
+        int maximumDistance = 30;
 
-        while(distance < maxinumDistance)
+        while(distance < maximumDistance)
         {
             Vector2Int rightCoordinate = coordinate + new Vector2Int(distance, 0);
             bool hasRightNode = rightCoordinate.x < _grid.Width && _grid.GetNode(rightCoordinate).IsOccupied != true;

@@ -13,7 +13,6 @@ public class PathPointCatcher : MonoBehaviour
     private Vector2Int _targetCoordinate;
     private Grid _grid; 
     private Collider _collider;
-    private int _maxRadiusLoot = 5;
 
     public event Action<bool> LootWasLastPoint;
 
@@ -34,6 +33,11 @@ public class PathPointCatcher : MonoBehaviour
         _pathHandler.CreatedPathToExit -= AddPathPoint;
     }
 
+    public Node GetTargetNode()
+    {
+        return _grid.GetNode(_targetCoordinate);
+    }
+
     public void TryAddTouchPoint(InputAction.CallbackContext context)
     {
         Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -48,26 +52,19 @@ public class PathPointCatcher : MonoBehaviour
             {
                 lootObject.ScheduleInPathPoints();
                 MakePathToLootObject(lootObject);
-                LootWasLastPoint(true);
+                LootWasLastPoint?.Invoke(true);
                 return;
             }
 
-            LootWasLastPoint(false);
+            LootWasLastPoint?.Invoke(false);
             AddPathPoint(hit.point);
         }
     }
 
     private void AddPathPoint(Vector3 hitPosition)
     {
-        Vector3 difference = hitPosition - _gridHolder.Offset;
-
-        _targetCoordinate = new Vector2Int(CalculateCoordinate((int)difference.x),
-            CalculateCoordinate((int)difference.z));
-
-        Vector3 playerCoordinateDifference = _pathCreator.transform.position - _gridHolder.Offset;
-
-        Node playerNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
-            CalculateCoordinate((int)playerCoordinateDifference.z));
+        _targetCoordinate = GetTargetPointWithOffset(hitPosition);       
+        Node playerNode = GetPlayerNodeWithOffset();
 
         _pathHandler.AddPoint(_targetCoordinate, playerNode);
     }
@@ -75,35 +72,21 @@ public class PathPointCatcher : MonoBehaviour
     private void MakePathToLootObject(Loot loot)
     {
         Vector3 closestPoint = _collider.ClosestPoint(loot.transform.position);
+        Vector2Int node = GetTargetPointWithOffset(closestPoint);
 
         Vector3 nodePosition = closestPoint - _gridHolder.Offset;
+        Node pointNode = _grid.GetNode(GetCoordinateWithNodeSize((int)nodePosition.x),
+                GetCoordinateWithNodeSize((int)nodePosition.z));
 
-        Node pointNode = _grid.GetNode(CalculateCoordinate((int)nodePosition.x),
-                CalculateCoordinate((int)nodePosition.z));
+        Vector2Int freeNode = _grid.GetNearestFreeNode(node);
 
-        Vector3 playerCoordinateDifference = _pathCreator.transform.position - _gridHolder.Offset;
-
-        int repeat = 0;
-
-        while (pointNode.IsOccupied == true && repeat < _maxRadiusLoot)
-        {
-            Vector2Int node = new Vector2Int(CalculateCoordinate((int)nodePosition.x),
-                CalculateCoordinate((int)nodePosition.z));
-
-            Vector2Int freeNode = _grid.GetNearestFreeNode(node);
-
-            _targetCoordinate = freeNode;
-
-            pointNode = _grid.GetNode(CalculateCoordinate((int)playerCoordinateDifference.x),
-                CalculateCoordinate((int)playerCoordinateDifference.z));
-
-            repeat++;
-        }
+        _targetCoordinate = freeNode;
+        pointNode = GetPlayerNodeWithOffset();
 
         _pathHandler.AddPoint(_targetCoordinate, pointNode);
     }
 
-    private int CalculateCoordinate(int coordinateOnAxis)
+    private int GetCoordinateWithNodeSize(int coordinateOnAxis)
     {
         return (int)(coordinateOnAxis / _gridHolder.NodeSize);
     }
@@ -113,8 +96,23 @@ public class PathPointCatcher : MonoBehaviour
         _grid.SetNewTarget(target);
     }
 
-    public Node GetTargetNode()
+    private Vector2Int GetTargetPointWithOffset(Vector3 hitPosition)
     {
-        return _grid.GetNode(_targetCoordinate);
+        Vector3 difference = hitPosition - _gridHolder.Offset;
+
+        Vector2Int targetPoint = new Vector2Int(GetCoordinateWithNodeSize((int)difference.x),
+            GetCoordinateWithNodeSize((int)difference.z));
+
+        return targetPoint;
+    }
+
+    private Node GetPlayerNodeWithOffset()
+    {
+        Vector3 playerCoordinateDifference = _pathCreator.transform.position - _gridHolder.Offset;
+
+        Node node = _grid.GetNode(GetCoordinateWithNodeSize((int)playerCoordinateDifference.x),
+            GetCoordinateWithNodeSize((int)playerCoordinateDifference.z));
+
+        return node;
     }
 }

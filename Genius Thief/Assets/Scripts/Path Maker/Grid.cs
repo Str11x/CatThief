@@ -31,7 +31,7 @@ public class Grid
                     new Vector3(line + _offsetNumber, 0, column + _offsetNumber) * nodeSize);
 
                 if (IsObstacle(_nodes[line, column]))
-                    _nodes[line, column].IsOccupied = true;
+                    _nodes[line, column].SetOccupiedState(true);
             }
         }
 

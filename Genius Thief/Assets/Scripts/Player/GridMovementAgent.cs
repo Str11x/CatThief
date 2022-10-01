@@ -72,7 +72,7 @@ public class GridMovementAgent : MonoBehaviour
             transform.Translate(delta);
 
             if (_pathPointCatcher.GetTargetNode() == _targetNode)
-                _targetNode.NextNode = null;                
+                _targetNode.SetNextNode(null);                
 
             yield return _updateTime;
         }

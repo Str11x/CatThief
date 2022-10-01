@@ -10,7 +10,6 @@ public class PathRenderer : MonoBehaviour
     [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private ClickMarker _marker;
     [SerializeField] private Line _line;
-    //[SerializeField] private PlayerMovementAgent _player;
     [SerializeField] private Exit _exit;
   
     private PathHandler _pathHandler; 
