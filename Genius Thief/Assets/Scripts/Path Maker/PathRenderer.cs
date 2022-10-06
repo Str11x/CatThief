@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class PathRenderer : MonoBehaviour
     private List<ClickMarker> _markers = new List<ClickMarker>();
     private float _height = 0.1f;
     private int _lastIndexInPastPath = 0;
+
+    public event Action AddedMarker;
 
     private void Start()
     {
@@ -49,6 +52,7 @@ public class PathRenderer : MonoBehaviour
         newMarker.AddStep(_markers.Count + 1);
 
         _markers.Add(newMarker);
+        AddedMarker?.Invoke();
     }
 
     public void RealTimeDrawPath()

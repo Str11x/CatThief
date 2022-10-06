@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WaypointMovement : MonoBehaviour
 {
-    private const string StopMovement = "StopMovement";
+    private const string StopMovement = "StopMovementCoroutine";
 
     [SerializeField] private Transform _path;
 

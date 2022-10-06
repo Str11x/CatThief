@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
@@ -5,6 +6,7 @@ public class Loot : MonoBehaviour
 {
     private MeshRenderer _meshRenderer;
     private RewardObjects _rewardObjectsService;
+    private ParticleSystem _rewardDefaultEffect;
 
     private int _pickedUpItems;
 
@@ -12,6 +14,7 @@ public class Loot : MonoBehaviour
 
     private void Start()
     {
+        _rewardDefaultEffect = GetComponentInChildren<ParticleSystem>();
         _rewardObjectsService = GetComponentInParent<RewardObjects>();
 
         _pickedUpItems = LayerMask.NameToLayer("Picked up items");
@@ -25,6 +28,9 @@ public class Loot : MonoBehaviour
             player.AddCount();
             _meshRenderer.enabled = false;
             gameObject.layer = _pickedUpItems;
+
+            _rewardDefaultEffect.gameObject.SetActive(false);
+            _rewardObjectsService.DoPickupEffect(transform.position);
         }
     }
 

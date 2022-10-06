@@ -14,7 +14,6 @@ public class WinnerScreenScore : MonoBehaviour
     [SerializeField] private TMP_Text _fullCompleteText;
 
     private WaitForSeconds _waitTime = new WaitForSeconds(0.1f);
-    private float halfMultiply = 0.5f;
     private float almostCompleteMultiply = 0.75f;
     private Loot[] _allLoot;
     private int _starsScore;

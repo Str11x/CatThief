@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,6 +9,9 @@ public class Player : MonoBehaviour
     private Suite [] _allSuites;
 
     public int MarkersCount { get; private set; }
+
+    public event Action StartedMovement;
+    public event Action TouchedMarker;
 
     private void Awake()
     {
@@ -33,5 +37,11 @@ public class Player : MonoBehaviour
     public void AddMarkerCount()
     {
         MarkersCount++;
+        TouchedMarker?.Invoke();
+    }
+
+    public void StartAnimation()
+    {
+        StartedMovement?.Invoke();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,9 +6,14 @@ public class RewardObjects : MonoBehaviour
 {
     [SerializeField] private PathHandler _pathHandler;
     [SerializeField] private PathPointCatcher _pathPointCathcer;
+    [SerializeField] private ParticleSystem _pickupEffect;
 
     private List<Loot> _lootedObjectsInPlan = new List<Loot>();
     private List<bool> _isLoot = new List<bool>();
+
+    public Vector3 LastLootPosition { get; private set; }
+
+    public event Action PickedupLoot;
 
     private void Start()
     {
@@ -50,4 +56,12 @@ public class RewardObjects : MonoBehaviour
     {
         _lootedObjectsInPlan.Add(newLoot);
     }
+
+    public void DoPickupEffect(Vector3 position)
+    {
+        LastLootPosition = position;
+        _pickupEffect.transform.position = position;
+        _pickupEffect.Play();
+        PickedupLoot?.Invoke();
+    } 
 }

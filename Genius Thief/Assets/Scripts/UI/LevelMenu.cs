@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,6 +24,9 @@ public class LevelMenu : MonoBehaviour
     private string _showNoLootScreen = "ShowNoLootScreen";
 
     public int SceneIndex { get; private set; }
+
+    public event Action LevelFailed;
+    public event Action LevelDone;
 
     private void Awake()
     {
@@ -54,6 +58,7 @@ public class LevelMenu : MonoBehaviour
 
     public void ShowWinnerScreen()
     {
+        LevelDone?.Invoke();
         _menuButton.gameObject.SetActive(false);
         _levelCompleteText.gameObject.SetActive(true);
     }
@@ -89,6 +94,7 @@ public class LevelMenu : MonoBehaviour
 
     private void ShowNoLootScreen()
     {
+        LevelFailed?.Invoke();
         _noLootDescription.enabled = true;
         _menuButton.gameObject.SetActive(false);
         _gameOverText.gameObject.SetActive(true);

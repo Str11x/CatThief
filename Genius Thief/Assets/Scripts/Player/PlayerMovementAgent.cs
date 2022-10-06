@@ -57,7 +57,9 @@ public class PlayerMovementAgent : MonoBehaviour
 
         while (nextPoint < _pathHandler.GetAllPathPoints())
         {
-            while(transform.position != _pathHandler.GetPathPoint(nextPoint))
+            transform.LookAt(_pathHandler.GetPathPoint(nextPoint));
+
+            while (transform.position != _pathHandler.GetPathPoint(nextPoint))
             {
                 transform.position = Vector3.MoveTowards(transform.position, _pathHandler.GetPathPoint(nextPoint), 0.1f);
 
