@@ -13,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TouchPress",
+                    "type": "Button",
+                    "id": "9d099e6a-ffbe-424c-9449-2d643c1b83d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -29,12 +38,12 @@
                 },
                 {
                     "name": "",
-                    "id": "56c6ec1b-b491-455b-a1ce-bad0c4e96d46",
-                    "path": "<Touchscreen>/Press",
+                    "id": "9bb0d22b-ef4a-4d98-9cd2-6fae283d4762",
+                    "path": "<Touchscreen>/primaryTouch/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Touch/Left Button",
+                    "action": "TouchPress",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

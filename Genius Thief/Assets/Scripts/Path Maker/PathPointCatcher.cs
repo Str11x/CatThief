@@ -61,6 +61,29 @@ public class PathPointCatcher : MonoBehaviour
         }
     }
 
+    public void TryAddTouchscreenPoint(InputAction.CallbackContext context)
+    {
+        Ray ray = _camera.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
+
+        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true && _pathHandler.IsNewPointAvailable() == true)
+        {
+            if (hit.transform != _gridHolder.transform && hit.collider.TryGetComponent(out Loot loot) == false
+                || hit.collider.TryGetComponent(out Loot loot2) && loot2.IsLooted == true)
+                return;
+
+            if (hit.collider.TryGetComponent(out Loot lootObject))
+            {
+                lootObject.ScheduleInPathPoints();
+                MakePathToLootObject(lootObject);
+                LootWasLastPoint?.Invoke(true);
+                return;
+            }
+
+            LootWasLastPoint?.Invoke(false);
+            AddPathPoint(hit.point);
+        }
+    }
+
     private void AddPathPoint(Vector3 hitPosition)
     {
         _targetCoordinate = GetTargetPointWithOffset(hitPosition);       

@@ -7,10 +7,11 @@ public class ShowRewardText : MonoBehaviour
 
     [SerializeField] private RewardObjects _lootService;
 
-    private int _timeToTurnOff = 1;
+    private float _timeToTurnOff = 0.2f;
     private Vector3 _offsetMessagePosition = new Vector3 (-2, 2, -2);
 
-    private TMP_Text[] _messages; 
+    private TMP_Text[] _messages;
+    private int _currentRandomMessage;
 
     private void Awake()
     {
@@ -26,15 +27,15 @@ public class ShowRewardText : MonoBehaviour
 
     private void EnableRandomTextMessage()
     {
-        int randomMessage = Random.Range(0, _messages.Length);
-        _messages[randomMessage].transform.position = _lootService.LastLootPosition + _offsetMessagePosition;
+        _currentRandomMessage = Random.Range(0, _messages.Length);
+        _messages[_currentRandomMessage].transform.position = _lootService.LastLootPosition + _offsetMessagePosition;
 
-        _messages[randomMessage].gameObject.SetActive(true);
+        _messages[_currentRandomMessage].gameObject.SetActive(true);
         Invoke(DisableMessage, _timeToTurnOff);
     }
 
-    private void DisableLastMessage(int lastMessageNumber)
+    private void DisableLastMessage()
     {
-        _messages[lastMessageNumber].gameObject.SetActive(false);
+        _messages[_currentRandomMessage].gameObject.SetActive(false);
     }
 }
