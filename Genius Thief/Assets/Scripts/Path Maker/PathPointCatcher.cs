@@ -38,11 +38,9 @@ public class PathPointCatcher : MonoBehaviour
         return _grid.GetNode(_targetCoordinate);
     }
 
-    public void TryAddTouchPoint(InputAction.CallbackContext context)
-    {
-        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true && _pathHandler.IsNewPointAvailable() == true)
+    private void TryAddTouchPoint(Ray ray)
+    {          
+        if (Physics.Raycast(ray, out RaycastHit hit) && _pathHandler.IsNewPointAvailable() == true)
         {
             if (hit.transform != _gridHolder.transform && hit.collider.TryGetComponent(out Loot loot) == false
                 || hit.collider.TryGetComponent(out Loot loot2) && loot2.IsLooted == true)
@@ -61,27 +59,20 @@ public class PathPointCatcher : MonoBehaviour
         }
     }
 
-    public void TryAddTouchscreenPoint(InputAction.CallbackContext context)
+    public void SetTouchPosition(InputAction.CallbackContext context)
     {
         Ray ray = _camera.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
 
-        if (Physics.Raycast(ray, out RaycastHit hit) && context.performed == true && _pathHandler.IsNewPointAvailable() == true)
-        {
-            if (hit.transform != _gridHolder.transform && hit.collider.TryGetComponent(out Loot loot) == false
-                || hit.collider.TryGetComponent(out Loot loot2) && loot2.IsLooted == true)
-                return;
+        if (context.performed == true)
+            TryAddTouchPoint(ray);
+    }
 
-            if (hit.collider.TryGetComponent(out Loot lootObject))
-            {
-                lootObject.ScheduleInPathPoints();
-                MakePathToLootObject(lootObject);
-                LootWasLastPoint?.Invoke(true);
-                return;
-            }
+    public void SetClickPosition(InputAction.CallbackContext context)
+    {
+        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-            LootWasLastPoint?.Invoke(false);
-            AddPathPoint(hit.point);
-        }
+        if (context.performed == true)
+            TryAddTouchPoint(ray);
     }
 
     private void AddPathPoint(Vector3 hitPosition)

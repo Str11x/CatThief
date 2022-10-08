@@ -11,7 +11,7 @@ public class GridMovementAgent : MonoBehaviour
     private WaitForFixedUpdate _updateTime = new WaitForFixedUpdate();
     private Coroutine _movement;
     private Node _targetNode;
-    private const float _tolerance = 0.4f;
+    private const float _tolerance = 1.5f;
     
     public Vector3 StartPosition { get; private set; }
 

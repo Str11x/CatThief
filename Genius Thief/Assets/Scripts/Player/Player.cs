@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public event Action StartedMovement;
     public event Action TouchedMarker;
 
-    private void Awake()
+    private void Start()
     {
         _allSuites = GetComponentsInChildren<Suite>();
 

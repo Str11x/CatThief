@@ -7,7 +7,7 @@ public class ShowRewardText : MonoBehaviour
 
     [SerializeField] private RewardObjects _lootService;
 
-    private float _timeToTurnOff = 0.2f;
+    private float _timeToTurnOff = 0.6f;
     private Vector3 _offsetMessagePosition = new Vector3 (-2, 2, -2);
 
     private TMP_Text[] _messages;
