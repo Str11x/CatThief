@@ -5,144 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Plugins/TypedScenes/Samples/SampleScene.unity
-    guid: 19ccee4d312e08047a0e7843cd5ac040
   - enabled: 1
     path: Assets/Scenes/Levels/Train.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_23___Animating_Vertex_Attributes.unity
-    guid: a459656fa3a322346b51dbb5e4ef8792
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_12___Link_Example.unity
-    guid: b75a1de97e5c4e74baec4fcaa400d39d
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_07___Superscript___Subscript_Example.unity
-    guid: f61e0b427f5af854d96ee29965c807b4
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_16___Linked_text_overflow_mode_example.unity
-    guid: bf67e3f5cc0a41d49b008bdcf646fafb
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_03___Line_Justification.unity
-    guid: c72c1d4b42b3b334bb3131ed195aead0
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_13___Soft_Hyphenation.unity
-    guid: d6da03bb23d4ca74881f8391f8ded458
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_05___Style_Tags.unity
-    guid: 94458c99779fbf64dbece1fa4895b214
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_01___Single_Line_TextMesh_Pro.unity
-    guid: 3c9a6bccc7635c0479ad8598f9090b62
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_21___Script_Example.unity
-    guid: 4a07e572dbac4f749a0f09b20ae531ce
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_17___Old_Computer_Terminal.unity
-    guid: 274d093cf3639894fbdd7e55eb4b73e6
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_09___Margin_Tag_Example.unity
-    guid: de2bb868a3700aa45b8fc2af8af87cf2
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_04___Word_Wrapping.unity
-    guid: 35ffd70b74637254d9d05acd7af63775
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_02___Multi_line_TextMesh_Pro.unity
-    guid: 9912b7f417b5a5c42bea8db6e9f1a25c
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_25___Sunny_Days_Example.unity
-    guid: f4ac3a1fcfa413f40bc6b3ff2cc1b2b3
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_15___Inline_Graphics___Sprites.unity
-    guid: 628e312aea84ccd44a67729c48c9f5a1
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_08___Improved_Text_Alignment.unity
-    guid: c6f5a96524335ca44b9b2c7199d30502
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_06___Extra_Rich_Text_Examples.unity
-    guid: 8c4a3ef80bd7c39469022825e73e980b
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_22___Basic_Scripting_Example.unity
-    guid: 6a8fe08e1bb533a48bcc954ce278534a
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_18___ScrollRect___Masking___Layout.unity
-    guid: 363ec3c30e93b93438f8d335bb17a2f1
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_19___Masking_Texture___Soft_Mask.unity
-    guid: 201b9dd343c83bd47b7dc12fc7ed0e5a
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_11___The_Style_Tag.unity
-    guid: 167c76862d42810469a51edf0ca89aef
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_26___Dropdown_Placeholder_Example.unity
-    guid: 17a1fc14a23555e45952a8d406c3b3b5
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_24___Surface_Shader_Example.unity
-    guid: 024c347b8d3a7714db259866ffe1c11e
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_10___Bullets___Numbered_List_Example.unity
-    guid: b696f50b22b6b524aae2177f89e5e76c
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_14___Multi_Font___Sprites.unity
-    guid: c2eecaded35ed4f41afe78cf8e9a3df7
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_20___Input_Field_with_Scrollbar.unity
-    guid: bd0290d4e9206e1418fe8383ea9448bf
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/Benchmark__Floating_Text_.unity
-    guid: 1d87c08a8b7b0314ba6fe64a8434a12a
-  - enabled: 0
-    path: Assets/TextMesh Pro/Examples & Extras/Scenes/_12a___Text_Interactions.unity
-    guid: c01a0f1ca6249e3438f4576f410d53e7
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneTests/TestDestructionOrder/TestDestructionOrder1.unity
-    guid: 91f1a89eec2339443a33e85d58a69325
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneTests/TestDestructionOrder/EmptyScene.unity
-    guid: f0b451bb575d6874db7cdbcfb24a45de
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneTests/TestSceneContextEvents/TestSceneContextEvents.unity
-    guid: 6a6e139b8a4d4d544a3318c53b9ae3d6
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneContractTests/Decorators/Scene1.unity
-    guid: 9561978599724fa4695e4683cf4af028
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneContractTests/AutoLoader/Scene1.unity
-    guid: 842c1766cf27f1e469d9d41b9f829ab7
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneContractTests/Decorators/Scene2.unity
-    guid: e51117d8dc00ad145a3097828d414398
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/SampleGame2 (Advanced)/Scenes/SpaceFighter.unity
-    guid: aea20ff1b07af644f9638d9c740ec0e0
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneContractTests/AutoLoader/Scene2.unity
-    guid: e290c5ee5cba76840b3564b4fc30737c
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneContractTests/AutoLoader/Scene3.unity
-    guid: faa2053ed94777648896eb4be8f2b5c1
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/SampleGame1 (Beginner)/Asteroids.unity
-    guid: 1fbbab4d6f8dcbd4eb46075a8f4a68e4
-  - enabled: 0
-    path: Assets/Plugins/Zenject/OptionalExtras/IntegrationTests/SceneTests/TestDestructionOrder/TestDestructionOrder2.unity
-    guid: d065ed24cd906b04f9d9764f76ccb48b
   - enabled: 1
     path: Assets/Scenes/Levels/AnotherRoom.unity
-    guid: 705715a48ade22b4594b4d78783abe34
-  - enabled: 0
-    path: Assets/Scenes/Levels/re.unity
-    guid: bc007a20462c0ae4b86b9dc2f75f2639
+    guid: c00c527e838333e4f854dcc6d1377e3f
+  - enabled: 1
+    path: Assets/Scenes/Levels/AnotherEnemy.unity
+    guid: 92f6c5476ccd5c8428acae55787fa7aa
+  - enabled: 1
+    path: Assets/Scenes/Levels/TimingIsYourFriend.unity
+    guid: d7f58fb03db67d3429397938eff94186
   - enabled: 1
     path: Assets/Scenes/Levels/Titles.unity
-    guid: 81b111a19c084974bbf616f0d88918a8
-  - enabled: 1
-    path: Assets/Scenes/Levels/_3.unity
-    guid: 6e30ad80edacac943b3d2956ec577697
-  - enabled: 0
-    path: Assets/JMO Assets/Cartoon FX/Demo/CFX_Free_Demo.unity
-    guid: e931bbb0ae451d846b1c96172c31bd23
+    guid: 2fb770c7cf11f014cb7b5473cccf3e01
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 8f0d4556c630a8543a9fa8a6b8379fd5, type: 2}
     com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 8acc38ccc624f5e4b8ed8a0a8d6a4e27, type: 2}

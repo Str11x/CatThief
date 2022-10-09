@@ -46,7 +46,7 @@ public class PathRenderer : MonoBehaviour
     }
 
     private void CreateMarker(Vector3 markerPosition)
-    {
+    {       
         ClickMarker newMarker = Instantiate(_marker, markerPosition + Vector3.up * _height, Quaternion.identity);
         newMarker.SpecifyExit(_pathHandler.GetExitPosition());
         newMarker.AddStep(_markers.Count + 1);

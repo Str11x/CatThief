@@ -69,7 +69,7 @@ public class FlowFieldPathfinding
     public Vector2Int GetNearestFreeNeighbour(Vector2Int coordinate)
     {
         int distance = 1;
-        int maximumDistance = 30;
+        int maximumDistance = 10;
 
         while(distance < maximumDistance)
         {

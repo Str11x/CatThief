@@ -27,30 +27,6 @@ public class PlayerMovementAgent : MonoBehaviour
         FieldOfViewCalculate.GameIsLost -= StopMove;
     }
 
-    public void MoveToTargets()
-    {
-        if (_pathHandler.IsInteractWithMenu())
-            return;
-
-        StartedRobbery?.Invoke();
-
-        if (_exit.IsPlayerPlannedExit == false)
-            _pathHandler.AddPathToExit(_exit.transform.position);
-
-        IsStartMove = true;
-        _pathHandler.ClearRendererPoints();
-
-        if (_movement != null)
-        {
-            StopCoroutine(_movement);
-            _movement = StartCoroutine(Move());
-        }
-        else
-        {
-            _movement = StartCoroutine(Move());
-        }
-    }
-
     private IEnumerator Move()
     {
         int nextPoint = 0;
@@ -74,5 +50,29 @@ public class PlayerMovementAgent : MonoBehaviour
     {
         if (_movement != null)
             StopCoroutine(_movement);
+    }
+
+    public void MoveToTargets()
+    {
+        if (_pathHandler.IsInteractWithMenu())
+            return;
+
+        StartedRobbery?.Invoke();
+
+        if (_exit.IsPlayerPlannedExit == false)
+            _pathHandler.AddPathToExit(_exit.transform.position);
+
+        IsStartMove = true;
+        _pathHandler.ClearRendererPoints();
+
+        if (_movement != null)
+        {
+            StopCoroutine(_movement);
+            _movement = StartCoroutine(Move());
+        }
+        else
+        {
+            _movement = StartCoroutine(Move());
+        }
     }
 }

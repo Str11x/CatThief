@@ -7,7 +7,7 @@ public class Wallet : MonoBehaviour
 
     public event Action AddedCoin;
 
-    internal void AddPoints()
+    public void AddPoints()
     {
         PointsCount++;
         AddedCoin?.Invoke();

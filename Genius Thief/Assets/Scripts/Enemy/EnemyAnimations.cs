@@ -5,6 +5,8 @@ public class EnemyAnimations : MonoBehaviour
 {
     private Animator _animator;
 
+    private int _stopAnimation = 0;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -20,6 +22,6 @@ public class EnemyAnimations : MonoBehaviour
 
     private void StopAnimations()
     {
-        _animator.speed = 0;
+        _animator.speed = _stopAnimation;
     }
 }

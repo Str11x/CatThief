@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class LevelMenu : MonoBehaviour
 {
+    private const string LevelComplete = "LevelComplete";
+    private const string ShowWinScreen = "ShowWinnerScreen";
+    private const string ShowZeroLootScreen = "ShowNoLootScreen";
+
     [SerializeField] private Player _player;
     [SerializeField] private TimeService _timeService;
     [SerializeField] private LevelComplete _levelCompleteText;
@@ -16,13 +20,8 @@ public class LevelMenu : MonoBehaviour
 
     private int _timeDelay = 1;
     private int _levelComplete;
-    private int _lastLevelIndex = 4;
-    private int _titlesScene = 5;
     private float _screenDelay = 0.75f;
-    private string _levelDone = "LevelComplete";
-    private string _showWinnerScreen = "ShowWinnerScreen";
-    private string _showNoLootScreen = "ShowNoLootScreen";
-
+    
     public int SceneIndex { get; private set; }
 
     public event Action LevelFailed;
@@ -33,8 +32,11 @@ public class LevelMenu : MonoBehaviour
         Exit.LevelCompleted += LevelCompleted;
         FieldOfViewCalculate.GameIsLost += ShowGameOverScreen;
 
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            PlayerPrefs.DeleteAll();
+
         SceneIndex = SceneManager.GetActiveScene().buildIndex;
-        _levelComplete = PlayerPrefs.GetInt(_levelDone);
+        _levelComplete = PlayerPrefs.GetInt(LevelComplete);
     }
 
     private void OnDisable()
@@ -45,15 +47,12 @@ public class LevelMenu : MonoBehaviour
 
     private void EndGame()
     {
-        if (SceneIndex == _lastLevelIndex)
-            SceneManager.LoadScene(_titlesScene);             
-        else if (_levelComplete < SceneIndex)
-            PlayerPrefs.SetInt(_levelDone, SceneIndex);
+        PlayerPrefs.SetInt(LevelComplete, SceneIndex);                      
 
         if (_player.GetBalance() == 0)
-            Invoke(_showNoLootScreen, _screenDelay);
+            Invoke(ShowZeroLootScreen, _screenDelay);
         else 
-            Invoke(_showWinnerScreen, _screenDelay);
+            Invoke(ShowWinScreen, _screenDelay);
     }
 
     public void ShowWinnerScreen()

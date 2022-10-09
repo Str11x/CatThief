@@ -10,7 +10,6 @@ public class Score : MonoBehaviour
 
     private void Start()
     {
-
         FieldOfViewCalculate.GameIsLost += DisableRenderer;
         Exit.LevelCompleted += DisableRenderer;
 

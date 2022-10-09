@@ -8,6 +8,7 @@ public class ClickMarker : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _stepRenderer;
     [SerializeField] private Material _exitMaterial;
+    [SerializeField] private MeshRenderer _beam;
 
     private MeshRenderer _meshRenderer;
     private Vector3 _exitPosition;
@@ -39,6 +40,7 @@ public class ClickMarker : MonoBehaviour
             {
                 player.AddMarkerCount();
                 _meshRenderer.material = _exitMaterial;
+                _beam.enabled = false;
             }
         }             
     }

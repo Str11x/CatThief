@@ -79,7 +79,7 @@ public class PathPointCatcher : MonoBehaviour
     {
         _targetCoordinate = GetTargetPointWithOffset(hitPosition);       
         Node playerNode = GetPlayerNodeWithOffset();
-
+        
         _pathHandler.AddPoint(_targetCoordinate, playerNode);
     }
 

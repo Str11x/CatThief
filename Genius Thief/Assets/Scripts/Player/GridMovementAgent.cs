@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GridMovementAgent : MonoBehaviour
 {
+    private const float Tolerance = 1f;
+
     [SerializeField] private GridHolder _gridHolder;
     [SerializeField] private PathPointCatcher _pathPointCatcher;
     [SerializeField] private PathHandler _pathHandler;
@@ -11,7 +13,6 @@ public class GridMovementAgent : MonoBehaviour
     private WaitForFixedUpdate _updateTime = new WaitForFixedUpdate();
     private Coroutine _movement;
     private Node _targetNode;
-    private const float _tolerance = 1.5f;
     
     public Vector3 StartPosition { get; private set; }
 
@@ -24,6 +25,36 @@ public class GridMovementAgent : MonoBehaviour
     private void OnDestroy()
     {
         _pathHandler.MovedToPreviousState -= MoveToPreviousPathPoint;
+    }
+
+    private IEnumerator Move()
+    {
+        while (_targetNode != null)
+        {
+            Vector3 target = _targetNode.Position;
+
+            _pathHandler.AddNewNodePoint(target);
+
+            float distance = (target - transform.position).magnitude;
+
+            if (distance < Tolerance)
+            {
+                _targetNode = _targetNode.NextNode;
+
+                yield return _updateTime;
+            }
+
+            Vector3 direction = (target - transform.position).normalized;
+            Vector3 delta = direction * (_speed * Time.deltaTime);
+            transform.Translate(delta);
+
+            if (_pathPointCatcher.GetTargetNode() == _targetNode)
+                _targetNode.SetNextNode(null);
+
+            yield return _updateTime;
+        }
+
+        _pathHandler.SaveNewPointsState();
     }
 
     public void MoveToPreviousPathPoint()
@@ -47,36 +78,5 @@ public class GridMovementAgent : MonoBehaviour
         {
             _movement = StartCoroutine(Move());
         }   
-    }
-
-    private IEnumerator Move()
-    {
-        while (_targetNode != null)
-        {
-            Vector3 target = _targetNode.Position;
-
-            _pathHandler.AddNewNodePoint(target);
-
-            float distance = (target - transform.position).magnitude;
-
-            if (distance < _tolerance)
-            {
-                _targetNode = _targetNode.NextNode;
-
-                yield return null;
-            }
-
-            Vector3 direction = (target - transform.position ).normalized;
-            Vector3 delta = direction * (_speed * Time.deltaTime);
-            transform.Translate(delta);
-
-            if (_pathPointCatcher.GetTargetNode() == _targetNode)
-                _targetNode.SetNextNode(null);                
-
-            yield return _updateTime;
-        }
-
-        _pathHandler.CreateFinishMarker();        
-        _pathHandler.SaveNewPointsState();        
     }
 }

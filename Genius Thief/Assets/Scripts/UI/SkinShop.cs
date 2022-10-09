@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class SkinShop : MonoBehaviour
 {
+    [SerializeField] private Camera _camera;
     [SerializeField] private Player _player;
     [SerializeField] private float _playerSkinSize = 2.5f;   
     [SerializeField] private int _rightRotateStep = -20;
@@ -22,7 +23,7 @@ public class SkinShop : MonoBehaviour
     private Vector3 _rightRotation;
     private Vector3 _leftRotation;
     private Vector3 _cameraOffset = new Vector3(-20, 18, -20);
-    private Quaternion _lastRotation;
+    private Quaternion _lastRotation;    
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class SkinShop : MonoBehaviour
         _player.transform.localScale = _playerSkinScale;
         _player.transform.position = _shopPosition;
 
-        _player.transform.LookAt(Camera.main.transform.position + _cameraOffset);
+        _player.transform.LookAt(_camera.transform.position + _cameraOffset);
     }
 
     private void OnDisable()

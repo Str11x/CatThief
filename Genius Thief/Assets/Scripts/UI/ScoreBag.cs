@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class ScoreBag : MonoBehaviour
 {
     [SerializeField] private Wallet _wallet;

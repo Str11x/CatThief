@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PathHandler : MonoBehaviour
 {
-    [SerializeField] private GridMovementAgent _pathCreator;
+    [SerializeField] private GridMovementAgent _gridMovementAgent;
     [SerializeField] private PlayerMovementAgent _playerMovementAgent;
     [SerializeField] private Exit _exit;
     [SerializeField] private TimeService _menu;
@@ -24,7 +24,7 @@ public class PathHandler : MonoBehaviour
     public void AddPoint(Vector2Int newPoint, Node playerPosition)
     {
         PointPlanned?.Invoke(newPoint);
-        _pathCreator.MoveToTarget(playerPosition);
+        _gridMovementAgent.MoveToTarget(playerPosition);
     }
 
     public void ClearRendererPoints()
@@ -51,19 +51,15 @@ public class PathHandler : MonoBehaviour
         return _storage.GetMovementPoint(index);   
     }
 
-    public void CreateFinishMarker()
-    {
-        PathCreated?.Invoke(_storage.GetLastMovementPoint());
-    }
-
     public void SaveNewPointsState()
     {
         _storage.Save();
+        PathCreated?.Invoke(_storage.GetLastMovementPoint());
     }
 
     public void BackToPreviousState()
     {
-        if (_storage.MovementStepsCount == 0 && _pathCreator.transform.position == _pathCreator.StartPosition || 
+        if (_storage.MovementStepsCount == 0 && _gridMovementAgent.transform.position == _gridMovementAgent.StartPosition || 
             _storage.MovementStepsCount < 0 || _menu.IsInteractWithMenu)
             return;
 
@@ -76,7 +72,7 @@ public class PathHandler : MonoBehaviour
         if (_storage.MovementStepsCount == 0)
         {
             _storage.ClearMovementPoints();
-            return _pathCreator.StartPosition;
+            return _gridMovementAgent.StartPosition;
         }
 
         return _storage.GetFinishPoint();

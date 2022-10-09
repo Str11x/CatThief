@@ -26,7 +26,7 @@ public class WinnerScreenScore : MonoBehaviour
     {
         _allLoot = _allObjects.GetComponentsInChildren<Loot>();
     }
-    public void OnEnable()
+    private void OnEnable()
     {
         if (_renderScore != null)
         {

@@ -28,7 +28,7 @@ public class FieldOfViewCalculate : MonoBehaviour
     {
         while (CanSeePlayer == false)
         {
-            yield return null;
+            yield return new WaitForFixedUpdate();
             TryGetPlayerInView();
             if (CanSeePlayer)
                 GameIsLost?.Invoke();
