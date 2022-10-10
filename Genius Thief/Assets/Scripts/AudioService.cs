@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class AudioService : MonoBehaviour
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private Wallet _playerWallet;
     [SerializeField] private PathRenderer _pathRenderer;
     [SerializeField] private RewardObjects _rewardObjects;
     [SerializeField] private LevelMenu _levelMenu;
+    [SerializeField] private TimeService _timeService;
 
     [SerializeField] private AudioSource _mainTheme;
     [SerializeField] private AudioSource _markerInstantiate;
@@ -18,25 +19,31 @@ public class AudioService : MonoBehaviour
     [SerializeField] private AudioSource _gameOver;
     [SerializeField] private AudioSource _markerTouch;
 
+    private bool _isInstructionDisabled = false;
+
     private void Start()
     {
-        _player.TouchedMarker += PLayMarkerTouchSound;
+        _playerWallet.TouchedMarker += PlayMarkerTouchSound;
         _levelMenu.LevelDone += PlayWinnerTheme;
         _levelMenu.LevelFailed += PlayGameOverSound;
         FieldOfViewCalculate.GameIsLost += PlayGameOverSound;
         _rewardObjects.PickedupLoot += PlayPickedupSound;
         _pathRenderer.AddedMarker += PlayMarkerInstantiateSound;
+        _timeService.PauseEnabled += PauseSounds;
+        _timeService.PauseDisabled += PlayStartSound;
         _mainTheme.Play();
     }
 
     private void OnDisable()
     {
-        _player.TouchedMarker -= PLayMarkerTouchSound;
+        _playerWallet.TouchedMarker -= PlayMarkerTouchSound;
         _levelMenu.LevelDone -= PlayWinnerTheme;
         _levelMenu.LevelFailed -= PlayGameOverSound;
         FieldOfViewCalculate.GameIsLost -= PlayGameOverSound;
         _pathRenderer.AddedMarker -= PlayMarkerInstantiateSound;
         _rewardObjects.PickedupLoot -= PlayPickedupSound;
+        _timeService.PauseEnabled -= PauseSounds;
+        _timeService.PauseDisabled -= PlayStartSound;
     }
 
     private void PlayPickedupSound()
@@ -63,14 +70,20 @@ public class AudioService : MonoBehaviour
         _winnerTheme.Play();
     }
 
-    private void PLayMarkerTouchSound()
+    private void PlayMarkerTouchSound()
     {
         _markerTouch.Play();
     }
 
-    public void PlayStartSound()
+    private void PauseSounds()
     {
-        _startPlayer.Play();
+        _startPlayer.Pause();
+    }
+
+    public void PlayStartSound()
+    {   
+        if(_isInstructionDisabled == true)
+            _startPlayer.Play();
     }
 
     public void PlayBackButtonSound()
@@ -86,5 +99,10 @@ public class AudioService : MonoBehaviour
     public void PlayToggleClickButton()
     {
         _toggleClick.Play();
+    }
+
+    public void StartRobbery()
+    {
+        _isInstructionDisabled = true;
     }
 }

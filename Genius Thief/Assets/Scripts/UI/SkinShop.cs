@@ -1,14 +1,9 @@
-using DG.Tweening;
-using System;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SkinShop : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerSuite _player;
     [SerializeField] private float _playerSkinSize = 2.5f;   
     [SerializeField] private int _rightRotateStep = -20;
     [SerializeField] private int _leftRotateStep = 20;

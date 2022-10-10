@@ -1579,10 +1579,8 @@ GameObject:
   - component: {fileID: 69156357}
   - component: {fileID: 69156356}
   - component: {fileID: 69156355}
-  - component: {fileID: 69156354}
   - component: {fileID: 69156358}
   - component: {fileID: 69156353}
-  - component: {fileID: 69156359}
   m_Layer: 0
   m_Name: PathCreator
   m_TagString: Untagged
@@ -1606,19 +1604,6 @@ MonoBehaviour:
   _pathPointCatcher: {fileID: 1608686039}
   _pathHandler: {fileID: 1608686038}
   _speed: 40
---- !u!65 &69156354
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69156352}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &69156355
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1696,22 +1681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9bd786099b5eb449af4a458b68865e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &69156359
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 69156352}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &69266554
 GameObject:
   m_ObjectHideFlags: 0
@@ -4771,7 +4740,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &241863843
 Transform:
@@ -5914,7 +5883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38c3a6662a3d0bf4e9ff69b52005e885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 1728637095}
+  _playerWallet: {fileID: 1728637099}
   _timeService: {fileID: 293941548}
   _levelCompleteText: {fileID: 1051145669}
   _gameOverText: {fileID: 2144051462}
@@ -7669,7 +7638,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &412647035
 Transform:
@@ -14468,6 +14437,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleHomeChair (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c6a673b86062d614b80d4fd65cedae8e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6a673b86062d614b80d4fd65cedae8e, type: 3}
 --- !u!1 &1020886949
@@ -15730,6 +15703,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleHomeChair
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c6a673b86062d614b80d4fd65cedae8e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6a673b86062d614b80d4fd65cedae8e, type: 3}
 --- !u!1 &1096729961
@@ -16278,10 +16255,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4905226b176649d42b093598085ba56b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 1728637095}
+  _playerWallet: {fileID: 1728637099}
   _pathRenderer: {fileID: 1608686037}
   _rewardObjects: {fileID: 634293220}
   _levelMenu: {fileID: 293941549}
+  _timeService: {fileID: 293941548}
   _mainTheme: {fileID: 108414751}
   _markerInstantiate: {fileID: 598237526}
   _pickedupLoot: {fileID: 1633078563}
@@ -17236,6 +17214,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleHomeChair (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c6a673b86062d614b80d4fd65cedae8e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6a673b86062d614b80d4fd65cedae8e, type: 3}
 --- !u!1 &1176479916
@@ -17619,9 +17601,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1728637095}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+      - m_Target: {fileID: 1728637101}
+        m_TargetAssemblyTypeName: PlayerAnimationState, Assembly-CSharp
         m_MethodName: StartAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1114291400}
+        m_TargetAssemblyTypeName: AudioService, Assembly-CSharp
+        m_MethodName: StartRobbery
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25602,6 +25596,7 @@ GameObject:
   - component: {fileID: 1728637098}
   - component: {fileID: 1728637099}
   - component: {fileID: 1728637100}
+  - component: {fileID: 1728637101}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -25640,7 +25635,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultSuite: {fileID: 1730457083}
-  _wallet: {fileID: 1728637099}
 --- !u!114 &1728637096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25683,8 +25677,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.83073, y: 1.6210248, z: 0.46702728}
-  m_Center: {x: 0.0021157947, y: 1.0117055, z: -0.3616493}
+  m_Size: {x: 1.0086733, y: 1.7344257, z: 1.1392041}
+  m_Center: {x: -0.023143971, y: 0.9550049, z: 0.01756021}
 --- !u!114 &1728637099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25759,6 +25753,18 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 963194227}
+--- !u!114 &1728637101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728637093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25234b2bbc0de3c49985e2fa358fa135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1730457082 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4774694526068217690, guid: d4f6c5bbda6ab7749af7a139d02c9a2e, type: 3}

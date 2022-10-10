@@ -6,7 +6,7 @@ public class FieldOfViewCalculate : MonoBehaviour
 {
     [SerializeField] [Range(0, 360)] private float _angle;
     [SerializeField] private float _radius;
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerSuite _player;
     [SerializeField] private LayerMask _targetMask;
     [SerializeField] private LayerMask _obstructionMask;
 
@@ -15,7 +15,7 @@ public class FieldOfViewCalculate : MonoBehaviour
     public LayerMask ObstructionMask => _obstructionMask;
     public float Radius => _radius;
     public float Angle => _angle;
-    public Player Player => _player;
+    public PlayerSuite Player => _player;
 
     public static event Action GameIsLost;
 

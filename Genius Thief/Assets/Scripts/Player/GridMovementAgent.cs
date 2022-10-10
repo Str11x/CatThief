@@ -41,19 +41,19 @@ public class GridMovementAgent : MonoBehaviour
             {
                 _targetNode = _targetNode.NextNode;
 
-                yield return _updateTime;
+                if (_pathPointCatcher.GetTargetNode() == _targetNode)
+                    _targetNode.SetNextNode(null);
+
+                continue;
             }
 
             Vector3 direction = (target - transform.position).normalized;
             Vector3 delta = direction * (_speed * Time.deltaTime);
-            transform.Translate(delta);
-
-            if (_pathPointCatcher.GetTargetNode() == _targetNode)
-                _targetNode.SetNextNode(null);
+            transform.Translate(delta);                        
 
             yield return _updateTime;
         }
-
+        
         _pathHandler.SaveNewPointsState();
     }
 
@@ -67,7 +67,7 @@ public class GridMovementAgent : MonoBehaviour
         _targetNode = firstNode;
 
         if (_targetNode == null)
-            return;
+            return;           
 
         if (_movement != null)
         {

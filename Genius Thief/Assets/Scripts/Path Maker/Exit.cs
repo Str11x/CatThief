@@ -9,7 +9,7 @@ public class Exit : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out PlayerSuite player))
             LevelCompleted?.Invoke();          
         else
             IsPlayerPlannedExit = true;

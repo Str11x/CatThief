@@ -10,6 +10,8 @@ public class PlayerMovementAgent : MonoBehaviour
 
     private WaitForFixedUpdate _updateTime = new WaitForFixedUpdate();
     private Coroutine _movement;
+    private int _defaultLayer;
+    private int _playerLayer;
 
     public static event Action StartedRobbery;
 
@@ -19,6 +21,9 @@ public class PlayerMovementAgent : MonoBehaviour
     {
         FieldOfViewCalculate.GameIsLost += StopMove;
 
+        _defaultLayer = LayerMask.NameToLayer("Default");
+        _playerLayer = LayerMask.NameToLayer("Player");
+        gameObject.layer = _defaultLayer;
         transform.position = _pathCreator.transform.position;
     }
 
@@ -74,5 +79,7 @@ public class PlayerMovementAgent : MonoBehaviour
         {
             _movement = StartCoroutine(Move());
         }
+
+        gameObject.layer = _playerLayer;
     }
 }

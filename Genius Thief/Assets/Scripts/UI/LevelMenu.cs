@@ -10,7 +10,7 @@ public class LevelMenu : MonoBehaviour
     private const string ShowWinScreen = "ShowWinnerScreen";
     private const string ShowZeroLootScreen = "ShowNoLootScreen";
 
-    [SerializeField] private Player _player;
+    [SerializeField] private Wallet _playerWallet;
     [SerializeField] private TimeService _timeService;
     [SerializeField] private LevelComplete _levelCompleteText;
     [SerializeField] private GameOverScreen _gameOverText;
@@ -49,7 +49,7 @@ public class LevelMenu : MonoBehaviour
     {
         PlayerPrefs.SetInt(LevelComplete, SceneIndex);                      
 
-        if (_player.GetBalance() == 0)
+        if (_playerWallet.GetBalance() == 0)
             Invoke(ShowZeroLootScreen, _screenDelay);
         else 
             Invoke(ShowWinScreen, _screenDelay);

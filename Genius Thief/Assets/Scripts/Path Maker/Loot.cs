@@ -23,9 +23,9 @@ public class Loot : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out PlayerSuite player))
         {
-            player.AddCount();
+            player.GetComponent<Wallet>().AddPoints();
             _meshRenderer.enabled = false;
             gameObject.layer = _pickedUpItems;
 

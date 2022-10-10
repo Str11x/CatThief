@@ -5,12 +5,12 @@ public class Suite : MonoBehaviour
 {
     [SerializeField] private Toggle _toggle;
     
-    private Player _player;
+    private PlayerSuite _player;
 
     private void Awake()
     {
         _toggle.onValueChanged.AddListener(OnToggleChanged);
-        _player = GetComponentInParent<Player>();
+        _player = GetComponentInParent<PlayerSuite>();
     }
 
     private void OnToggleChanged(bool active)

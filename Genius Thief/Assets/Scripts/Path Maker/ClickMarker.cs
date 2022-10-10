@@ -33,12 +33,14 @@ public class ClickMarker : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         int nextPoint = 1;
+        Wallet playerWallet;
 
         if(int.TryParse(_stepRenderer.text, out int result))
         {
-            if (other.TryGetComponent(out Player player) && (player.MarkersCount + nextPoint) == result)
+            if (other.TryGetComponent(out PlayerSuite player) && 
+                ((playerWallet = player.GetComponent<Wallet>()).MarkersCount + nextPoint) == result)
             {
-                player.AddMarkerCount();
+                playerWallet.AddMarkerCount();
                 _meshRenderer.material = _exitMaterial;
                 _beam.enabled = false;
             }

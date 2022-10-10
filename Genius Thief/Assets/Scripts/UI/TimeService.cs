@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,9 @@ public class TimeService : MonoBehaviour
     private int _startTime = 1;
 
     public bool IsInteractWithMenu { get; private set; }
+
+    public event Action PauseEnabled;
+    public event Action PauseDisabled;
 
     private void Awake()
     {
@@ -42,11 +46,13 @@ public class TimeService : MonoBehaviour
         {
             Time.timeScale = _startTime;
             IsInteractWithMenu = false;
+            PauseDisabled?.Invoke();
         }
         else
         {
             Time.timeScale = _stopTime;
             IsInteractWithMenu = true;
+            PauseEnabled?.Invoke();
         }
     }
 
