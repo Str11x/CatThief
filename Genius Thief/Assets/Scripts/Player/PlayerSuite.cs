@@ -5,17 +5,17 @@ public class PlayerSuite : MonoBehaviour
     [SerializeField] Suite _defaultSuite;
 
     private Suite [] _allSuites;
-    private string _isSkinSaved;
+    private string _skinSaved;
     private string _currentSkin = "CurrentSkin";
 
-    private int _skinSaved = 1;
+    private int _skinSave = 1;
     private int _skinEmpty = 0;
 
     private void Start()
     {
         _allSuites = GetComponentsInChildren<Suite>();
 
-        if(PlayerPrefs.GetInt(_isSkinSaved) == _skinEmpty)
+        if(PlayerPrefs.GetInt(_skinSaved) == _skinEmpty)
         {
             foreach (Suite suite in _allSuites)
             {
@@ -40,6 +40,6 @@ public class PlayerSuite : MonoBehaviour
     public void UpdateCurrentSkin(string name)
     {
         PlayerPrefs.SetString(_currentSkin, name);
-        PlayerPrefs.SetInt(_isSkinSaved, _skinSaved);
+        PlayerPrefs.SetInt(_skinSaved, _skinSave);
     }
 }

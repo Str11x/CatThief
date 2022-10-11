@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Star : MonoBehaviour
 {
     private AudioSource _instantiateSound;

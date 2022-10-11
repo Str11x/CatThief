@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class WaypointMovement : MonoBehaviour
 {
-    private const string StopMovement = "StopMovementCoroutine";
-
     [SerializeField] private Transform _path;
 
     private Coroutine _movement;
@@ -27,15 +25,8 @@ public class WaypointMovement : MonoBehaviour
             _points[i] = _path.GetChild(i);
         }
 
-        if(_movement != null)
-        {
-            StopCoroutine(_movement);
-            _movement = StartCoroutine(MoveToPathPoints());
-        }
-        else
-        {
-            _movement = StartCoroutine(MoveToPathPoints());
-        }
+        StopMovementCoroutine();
+        _movement = StartCoroutine(MoveToPathPoints());
     }
 
     private void OnDestroy()
@@ -46,7 +37,7 @@ public class WaypointMovement : MonoBehaviour
 
     private void DelayStopMovement()
     {
-        Invoke(StopMovement, _delayStopMovement);
+        Invoke(nameof(StopMovementCoroutine), _delayStopMovement);
     }
 
     private void StopMovementCoroutine()
@@ -57,7 +48,9 @@ public class WaypointMovement : MonoBehaviour
 
     private IEnumerator MoveToPathPoints()
     {
-        while (true)
+        int pointCount = _points.Length;
+
+        while (_points.Length > 0)
         {
             Transform target = _points[_currentPoint];
 

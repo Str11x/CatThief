@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
@@ -21,11 +20,12 @@ public class Loot : MonoBehaviour
 
         _meshRenderer = GetComponent<MeshRenderer>();
     }
+
     public void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out PlayerSuite player))
+        if (other.TryGetComponent(out Wallet playerWallet))
         {
-            player.GetComponent<Wallet>().AddPoints();
+            playerWallet.AddPoints();
             _meshRenderer.enabled = false;
             gameObject.layer = _pickedUpItems;
 

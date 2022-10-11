@@ -33,11 +33,6 @@ public class PathPointCatcher : MonoBehaviour
         _pathHandler.CreatedPathToExit -= AddPathPoint;
     }
 
-    public Node GetTargetNode()
-    {
-        return _grid.GetNode(_targetCoordinate);
-    }
-
     private void TryAddTouchPoint(Ray ray)
     {          
         if (Physics.Raycast(ray, out RaycastHit hit) && _pathHandler.IsNewPointAvailable() == true)
@@ -57,22 +52,6 @@ public class PathPointCatcher : MonoBehaviour
             LootWasLastPoint?.Invoke(false);
             AddPathPoint(hit.point);
         }
-    }
-
-    public void SetTouchPosition(InputAction.CallbackContext context)
-    {
-        Ray ray = _camera.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
-
-        if (context.performed == true)
-            TryAddTouchPoint(ray);
-    }
-
-    public void SetClickPosition(InputAction.CallbackContext context)
-    {
-        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        if (context.performed == true)
-            TryAddTouchPoint(ray);
     }
 
     private void AddPathPoint(Vector3 hitPosition)
@@ -128,5 +107,26 @@ public class PathPointCatcher : MonoBehaviour
             GetCoordinateWithNodeSize((int)playerCoordinateDifference.z));
 
         return node;
+    }
+
+    public void SetTouchPosition(InputAction.CallbackContext context)
+    {
+        Ray ray = _camera.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
+
+        if (context.performed == true)
+            TryAddTouchPoint(ray);
+    }
+
+    public void SetClickPosition(InputAction.CallbackContext context)
+    {
+        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (context.performed == true)
+            TryAddTouchPoint(ray);
+    }
+
+    public Node GetTargetNode()
+    {
+        return _grid.GetNode(_targetCoordinate);
     }
 }

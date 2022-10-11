@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class LevelMenu : MonoBehaviour
 {
     private const string LevelComplete = "LevelComplete";
-    private const string ShowWinScreen = "ShowWinnerScreen";
-    private const string ShowZeroLootScreen = "ShowNoLootScreen";
 
     [SerializeField] private Wallet _playerWallet;
     [SerializeField] private TimeService _timeService;
@@ -50,9 +48,9 @@ public class LevelMenu : MonoBehaviour
         PlayerPrefs.SetInt(LevelComplete, SceneIndex);                      
 
         if (_playerWallet.GetBalance() == 0)
-            Invoke(ShowZeroLootScreen, _screenDelay);
+            Invoke(nameof(ShowNoLootScreen), _screenDelay);
         else 
-            Invoke(ShowWinScreen, _screenDelay);
+            Invoke(nameof(ShowWinnerScreen), _screenDelay);
     }
 
     public void ShowWinnerScreen()

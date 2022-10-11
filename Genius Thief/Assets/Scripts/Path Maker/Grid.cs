@@ -16,6 +16,18 @@ public class Grid
 
     public int Height => _height;
 
+    private bool IsObstacle(Node node)
+    {
+        if (Physics.Raycast(node.Position, new Vector3(node.Position.x, node.Position.y + _heightGround, node.Position.z),
+            out RaycastHit hit, _obstacleDistance))
+        {
+            if (hit.collider.TryGetComponent<Obstacle>(out Obstacle obstacle))
+                return true;
+        }
+
+        return false;
+    }
+
     public Grid(int width, int height, Vector3 offset, float nodeSize)
     {
         _width = width;
@@ -63,18 +75,6 @@ public class Grid
                 yield return GetNode(line, column);
             }
         }
-    }
-
-    private bool IsObstacle(Node node)
-    {
-        if (Physics.Raycast(node.Position, new Vector3(node.Position.x, node.Position.y + _heightGround, node.Position.z),
-            out RaycastHit hit, _obstacleDistance))
-        {
-            if(hit.collider.TryGetComponent<Obstacle>(out Obstacle obstacle))
-                return true;
-        }
-
-        return false;
     }
 
     public void SetNewTarget(Vector2Int target)

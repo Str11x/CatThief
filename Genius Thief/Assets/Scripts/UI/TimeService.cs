@@ -58,14 +58,9 @@ public class TimeService : MonoBehaviour
 
     public void ChangePauseTime(int delay)
     {
-        if (_pauseWithDelay == null)
-        {
-            StartCoroutine(PauseWithDelay(delay));
-        }
-        else
-        {
+        if (_pauseWithDelay != null)
             StopCoroutine(_pauseWithDelay);
-            StartCoroutine(PauseWithDelay(delay));
-        }
+            
+        StartCoroutine(PauseWithDelay(delay));
     }
 }

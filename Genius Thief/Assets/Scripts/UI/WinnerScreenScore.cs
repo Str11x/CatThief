@@ -29,14 +29,9 @@ public class WinnerScreenScore : MonoBehaviour
     private void OnEnable()
     {
         if (_renderScore != null)
-        {
             StopCoroutine(_renderScore);
-            _renderScore = StartCoroutine(Render());
-        }
-        else
-        {
-            _renderScore = StartCoroutine(Render());
-        }
+
+        _renderScore = StartCoroutine(Render());
     }
 
     private IEnumerator Render()

@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ShowRewardText : MonoBehaviour
 {
-    private const string DisableMessage = "DisableLastMessage";
-
     [SerializeField] private RewardObjects _lootService;
 
     private float _timeToTurnOff = 0.6f;
@@ -31,7 +29,7 @@ public class ShowRewardText : MonoBehaviour
         _messages[_currentRandomMessage].transform.position = _lootService.LastLootPosition + _offsetMessagePosition;
 
         _messages[_currentRandomMessage].gameObject.SetActive(true);
-        Invoke(DisableMessage, _timeToTurnOff);
+        Invoke(nameof(DisableLastMessage), _timeToTurnOff);
     }
 
     private void DisableLastMessage()

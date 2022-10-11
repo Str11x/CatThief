@@ -35,6 +35,7 @@ public class PlayerMovementAgent : MonoBehaviour
     private IEnumerator Move()
     {
         int nextPoint = 0;
+        float maxDistanceDelta = 0.1f;
 
         while (nextPoint < _pathHandler.GetAllPathPoints())
         {
@@ -42,7 +43,7 @@ public class PlayerMovementAgent : MonoBehaviour
 
             while (transform.position != _pathHandler.GetPathPoint(nextPoint))
             {
-                transform.position = Vector3.MoveTowards(transform.position, _pathHandler.GetPathPoint(nextPoint), 0.1f);
+                transform.position = Vector3.MoveTowards(transform.position, _pathHandler.GetPathPoint(nextPoint), maxDistanceDelta);
 
                 yield return _updateTime;
             }
@@ -70,15 +71,8 @@ public class PlayerMovementAgent : MonoBehaviour
         IsStartMove = true;
         _pathHandler.ClearRendererPoints();
 
-        if (_movement != null)
-        {
-            StopCoroutine(_movement);
-            _movement = StartCoroutine(Move());
-        }
-        else
-        {
-            _movement = StartCoroutine(Move());
-        }
+        StopMove();
+        _movement = StartCoroutine(Move());
 
         gameObject.layer = _playerLayer;
     }

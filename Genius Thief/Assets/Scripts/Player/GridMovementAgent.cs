@@ -70,13 +70,7 @@ public class GridMovementAgent : MonoBehaviour
             return;           
 
         if (_movement != null)
-        {
             StopCoroutine(_movement);
-            _movement = StartCoroutine(Move());
-        }
-        else
-        {
-            _movement = StartCoroutine(Move());
-        }   
+        _movement = StartCoroutine(Move());
     }
 }
