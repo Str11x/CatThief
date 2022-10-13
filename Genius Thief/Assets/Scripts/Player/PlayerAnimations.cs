@@ -17,7 +17,7 @@ public class PlayerAnimations : MonoBehaviour
     private void OnEnable()
     {
         Exit.LevelCompleted += ChangeAnimation;
-        _playerState.StartedMovement += ChangeAnimation;
+        _playerState.MovementStarted += ChangeAnimation;
         FieldOfViewCalculate.GameIsLost += ChangeAnimation;
 
         if (_playerState.IsRun == true)
@@ -27,7 +27,7 @@ public class PlayerAnimations : MonoBehaviour
     private void OnDisable()
     {
         Exit.LevelCompleted -= ChangeAnimation;
-        _playerState.StartedMovement -= ChangeAnimation;
+        _playerState.MovementStarted -= ChangeAnimation;
         FieldOfViewCalculate.GameIsLost -= ChangeAnimation;
     }
 

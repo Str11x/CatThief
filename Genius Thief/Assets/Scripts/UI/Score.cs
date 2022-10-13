@@ -13,7 +13,7 @@ public class Score : MonoBehaviour
         FieldOfViewCalculate.GameIsLost += DisableRenderer;
         Exit.LevelCompleted += DisableRenderer;
 
-        _wallet.AddedCoin += UpdateScore;
+        _wallet.CoinAdded += UpdateScore;
         _result.text = _initialValue.ToString();
     }
 
@@ -21,7 +21,7 @@ public class Score : MonoBehaviour
     {
         FieldOfViewCalculate.GameIsLost -= DisableRenderer;
         Exit.LevelCompleted -= DisableRenderer;
-        _wallet.AddedCoin -= UpdateScore;
+        _wallet.CoinAdded -= UpdateScore;
     }
 
     private void UpdateScore()

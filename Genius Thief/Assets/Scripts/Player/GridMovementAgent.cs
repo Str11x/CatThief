@@ -19,12 +19,12 @@ public class GridMovementAgent : MonoBehaviour
     private void Start()
     {
         StartPosition = transform.position;
-        _pathHandler.MovedToPreviousState += MoveToPreviousPathPoint;
+        _pathHandler.MovedToPreviousState += MoveToPreviousPath;
     }
 
     private void OnDestroy()
     {
-        _pathHandler.MovedToPreviousState -= MoveToPreviousPathPoint;
+        _pathHandler.MovedToPreviousState -= MoveToPreviousPath;
     }
 
     private IEnumerator Move()
@@ -57,7 +57,7 @@ public class GridMovementAgent : MonoBehaviour
         _pathHandler.SaveNewPointsState();
     }
 
-    public void MoveToPreviousPathPoint()
+    public void MoveToPreviousPath()
     {
         transform.position = _pathHandler.GetPreviousPathFinishPoint();
     }

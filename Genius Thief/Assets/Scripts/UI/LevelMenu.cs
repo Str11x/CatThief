@@ -47,7 +47,7 @@ public class LevelMenu : MonoBehaviour
     {
         PlayerPrefs.SetInt(LevelComplete, SceneIndex);                      
 
-        if (_playerWallet.GetBalance() == 0)
+        if (_playerWallet.PointsCount == 0)
             Invoke(nameof(ShowNoLootScreen), _screenDelay);
         else 
             Invoke(nameof(ShowWinnerScreen), _screenDelay);

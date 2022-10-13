@@ -5,10 +5,10 @@ public class PlayerAnimationState : MonoBehaviour
 {
     public bool IsRun { get; private set; }
 
-    public event Action StartedMovement;
+    public event Action MovementStarted;
     public void StartAnimation()
     {
-        StartedMovement?.Invoke();
+        MovementStarted?.Invoke();
     }
 
     public void SavePlayerRun(bool state)

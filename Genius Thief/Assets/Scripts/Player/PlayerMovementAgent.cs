@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMovementAgent : MonoBehaviour
 {
+    private const string DefaultLayer = "Default";
+    private const string PlayerLayer = "Player";
+
     [SerializeField] private GridMovementAgent _pathCreator;
     [SerializeField] private PathHandler _pathHandler;
     [SerializeField] private Exit _exit;
@@ -13,7 +16,7 @@ public class PlayerMovementAgent : MonoBehaviour
     private int _defaultLayer;
     private int _playerLayer;
 
-    public static event Action StartedRobbery;
+    public static event Action RobberyStarted;
 
     public bool IsStartMove { get; private set; } = false;
 
@@ -21,8 +24,8 @@ public class PlayerMovementAgent : MonoBehaviour
     {
         FieldOfViewCalculate.GameIsLost += StopMove;
 
-        _defaultLayer = LayerMask.NameToLayer("Default");
-        _playerLayer = LayerMask.NameToLayer("Player");
+        _defaultLayer = LayerMask.NameToLayer(DefaultLayer);
+        _playerLayer = LayerMask.NameToLayer(PlayerLayer);
         gameObject.layer = _defaultLayer;
         transform.position = _pathCreator.transform.position;
     }
@@ -34,10 +37,10 @@ public class PlayerMovementAgent : MonoBehaviour
 
     private IEnumerator Move()
     {
-        int nextPoint = 0;
+        gameObject.layer = _playerLayer;
         float maxDistanceDelta = 0.1f;
 
-        while (nextPoint < _pathHandler.GetAllPathPoints())
+        for (int nextPoint = 0; nextPoint < _pathHandler.GetAllPathPoints(); nextPoint++)
         {
             transform.LookAt(_pathHandler.GetPathPoint(nextPoint));
 
@@ -63,17 +66,15 @@ public class PlayerMovementAgent : MonoBehaviour
         if (_pathHandler.IsInteractWithMenu())
             return;
 
-        StartedRobbery?.Invoke();
+        RobberyStarted?.Invoke();
 
         if (_exit.IsPlayerPlannedExit == false)
-            _pathHandler.AddPathToExit(_exit.transform.position);
+            _pathHandler.AddPathToExit(_exit.Position);
 
         IsStartMove = true;
         _pathHandler.ClearRendererPoints();
 
         StopMove();
-        _movement = StartCoroutine(Move());
-
-        gameObject.layer = _playerLayer;
+        _movement = StartCoroutine(Move());      
     }
 }

@@ -4,20 +4,20 @@ public class PlayerSuite : MonoBehaviour
 {
     [SerializeField] Suite _defaultSuite;
 
-    private Suite [] _allSuites;
-    private string _skinSaved;
+    private Suite [] _Suites;
+    private string _skinPresence;
     private string _currentSkin = "CurrentSkin";
 
-    private int _skinSave = 1;
+    private int _saveSkin = 1;
     private int _skinEmpty = 0;
 
     private void Start()
     {
-        _allSuites = GetComponentsInChildren<Suite>();
+        _Suites = GetComponentsInChildren<Suite>();
 
-        if(PlayerPrefs.GetInt(_skinSaved) == _skinEmpty)
+        if(PlayerPrefs.GetInt(_skinPresence) == _skinEmpty)
         {
-            foreach (Suite suite in _allSuites)
+            foreach (Suite suite in _Suites)
             {
                 if (suite != _defaultSuite)
                     suite.gameObject.SetActive(false);                       
@@ -27,7 +27,7 @@ public class PlayerSuite : MonoBehaviour
         {
             string skinName = PlayerPrefs.GetString(_currentSkin);
 
-            foreach (Suite suite in _allSuites)
+            foreach (Suite suite in _Suites)
             {
                 if (suite.gameObject.name != skinName)
                     suite.gameObject.SetActive(false);
@@ -40,6 +40,6 @@ public class PlayerSuite : MonoBehaviour
     public void UpdateCurrentSkin(string name)
     {
         PlayerPrefs.SetString(_currentSkin, name);
-        PlayerPrefs.SetInt(_skinSaved, _skinSave);
+        PlayerPrefs.SetInt(_skinPresence, _saveSkin);
     }
 }

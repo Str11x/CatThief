@@ -9,45 +9,45 @@ public class RewardObjects : MonoBehaviour
     [SerializeField] private ParticleSystem _pickupEffect;
 
     private List<Loot> _lootedObjectsInPlan = new List<Loot>();
-    private List<bool> _isLoot = new List<bool>();
+    private List<bool> _pickedupLoot = new List<bool>();
 
     public Vector3 LastLootPosition { get; private set; }
 
-    public event Action PickedupLoot;
+    public event Action LootPickedup;
 
     private void Start()
     {
         _pathHandler.MovedToPreviousState += RemoveLastLoot;
-        _pathPointCathcer.LootWasLastPoint += AddNewLootBoolean;
+        _pathPointCathcer.LootAddedInLastPoint += AddNewLootBoolean;
     }
 
     private void OnDisable()
     {
         _pathHandler.MovedToPreviousState -= RemoveLastLoot;
-        _pathPointCathcer.LootWasLastPoint -= AddNewLootBoolean;
+        _pathPointCathcer.LootAddedInLastPoint -= AddNewLootBoolean;
     }
 
     private void AddNewLootBoolean(bool isLootInLastPoint)
     {
-        _isLoot.Add(isLootInLastPoint);
+        _pickedupLoot.Add(isLootInLastPoint);
     }
 
     private void RemoveLastLoot()
     {
         if(_lootedObjectsInPlan != null)
         {
-            int penultimate = 1;
-            int lastLoot = _lootedObjectsInPlan.Count - penultimate;
+            int penultimate = _pickedupLoot.Count - 1;
+            int lastLootInPlan = _lootedObjectsInPlan.Count - 1;
 
-            if(_isLoot[_isLoot.Count - penultimate] == true)
+            if(_pickedupLoot[penultimate] == true)
             {
-                _lootedObjectsInPlan[lastLoot].DeleteFromSchedulePathPoints();
-                _lootedObjectsInPlan.RemoveAt(lastLoot);
-                _isLoot.RemoveAt(_isLoot.Count - penultimate);
+                _lootedObjectsInPlan[lastLootInPlan].DeleteFromSchedulePathPoints();
+                _lootedObjectsInPlan.RemoveAt(lastLootInPlan);
+                _pickedupLoot.RemoveAt(penultimate);
             }
             else
             {
-                _isLoot.RemoveAt(_isLoot.Count - penultimate);
+                _pickedupLoot.RemoveAt(penultimate);
             }       
         }     
     }
@@ -62,6 +62,6 @@ public class RewardObjects : MonoBehaviour
         LastLootPosition = position;
         _pickupEffect.transform.position = position;
         _pickupEffect.Play();
-        PickedupLoot?.Invoke();
+        LootPickedup?.Invoke();
     } 
 }

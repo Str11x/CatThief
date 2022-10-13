@@ -14,7 +14,7 @@ public class PathPointCatcher : MonoBehaviour
     private Grid _grid; 
     private Collider _collider;
 
-    public event Action<bool> LootWasLastPoint;
+    public event Action<bool> LootAddedInLastPoint;
 
     private void Start()
     {
@@ -38,18 +38,18 @@ public class PathPointCatcher : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit) && _pathHandler.IsNewPointAvailable() == true)
         {
             if (hit.transform != _gridHolder.transform && hit.collider.TryGetComponent(out Loot loot) == false
-                || hit.collider.TryGetComponent(out Loot loot2) && loot2.IsLooted == true)
+                || hit.collider.TryGetComponent(out Loot loot2) && loot2.IsLooted == true || hit.collider.TryGetComponent(out ClickMarker marker))
                 return;
 
             if (hit.collider.TryGetComponent(out Loot lootObject))
             {
                 lootObject.ScheduleInPathPoints();
                 MakePathToLootObject(lootObject);
-                LootWasLastPoint?.Invoke(true);
+                LootAddedInLastPoint?.Invoke(true);
                 return;
             }
 
-            LootWasLastPoint?.Invoke(false);
+            LootAddedInLastPoint?.Invoke(false);
             AddPathPoint(hit.point);
         }
     }
@@ -72,6 +72,9 @@ public class PathPointCatcher : MonoBehaviour
                 GetCoordinateWithNodeSize((int)nodePosition.z));
 
         Vector2Int freeNode = _grid.GetNearestFreeNode(node);
+
+        if (freeNode == node)
+            return;
 
         _targetCoordinate = freeNode;
         pointNode = GetPlayerNodeWithOffset();

@@ -10,7 +10,7 @@ public class ScoreBag : MonoBehaviour
 
     private void Start()
     {
-        _wallet.AddedCoin += ShakeBag;
+        _wallet.CoinAdded += ShakeBag;
         FieldOfViewCalculate.GameIsLost += DisableRenderer;
         Exit.LevelCompleted += DisableRenderer;
 
@@ -24,7 +24,7 @@ public class ScoreBag : MonoBehaviour
 
     private void OnDisable()
     {
-        _wallet.AddedCoin -= ShakeBag;
+        _wallet.CoinAdded -= ShakeBag;
         FieldOfViewCalculate.GameIsLost -= DisableRenderer;
         Exit.LevelCompleted -= DisableRenderer;
     }

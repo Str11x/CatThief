@@ -4,6 +4,7 @@ using UnityEngine;
 public class Exit : MonoBehaviour
 {
     public bool IsPlayerPlannedExit { get; private set; }
+    public Vector3 Position => transform.position;
 
     public static event Action LevelCompleted;
 

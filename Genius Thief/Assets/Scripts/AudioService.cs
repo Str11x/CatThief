@@ -23,12 +23,12 @@ public class AudioService : MonoBehaviour
 
     private void Start()
     {
-        _playerWallet.TouchedMarker += PlayMarkerTouchSound;
+        _playerWallet.MarkerTouched += PlayMarkerTouchSound;
         _levelMenu.LevelDone += PlayWinnerTheme;
         _levelMenu.LevelFailed += PlayGameOverSound;
         FieldOfViewCalculate.GameIsLost += PlayGameOverSound;
-        _rewardObjects.PickedupLoot += PlayPickedupSound;
-        _pathRenderer.AddedMarker += PlayMarkerInstantiateSound;
+        _rewardObjects.LootPickedup += PlayPickedupSound;
+        _pathRenderer.MarkerAdded += PlayMarkerInstantiateSound;
         _timeService.PauseEnabled += PauseSounds;
         _timeService.PauseDisabled += PlayStartSound;
         _mainTheme.Play();
@@ -36,12 +36,12 @@ public class AudioService : MonoBehaviour
 
     private void OnDisable()
     {
-        _playerWallet.TouchedMarker -= PlayMarkerTouchSound;
+        _playerWallet.MarkerTouched -= PlayMarkerTouchSound;
         _levelMenu.LevelDone -= PlayWinnerTheme;
         _levelMenu.LevelFailed -= PlayGameOverSound;
         FieldOfViewCalculate.GameIsLost -= PlayGameOverSound;
-        _pathRenderer.AddedMarker -= PlayMarkerInstantiateSound;
-        _rewardObjects.PickedupLoot -= PlayPickedupSound;
+        _pathRenderer.MarkerAdded -= PlayMarkerInstantiateSound;
+        _rewardObjects.LootPickedup -= PlayPickedupSound;
         _timeService.PauseEnabled -= PauseSounds;
         _timeService.PauseDisabled -= PlayStartSound;
     }

@@ -51,18 +51,13 @@ public class FlowFieldPathfinding
         Vector2Int upCoordinate = coordinate + Vector2Int.up;
         Vector2Int downCoordinate = coordinate + Vector2Int.down;
 
-        bool hasRightNode = rightCoordinate.x < _grid.Width && _grid.GetNode(rightCoordinate).IsOccupied != true;
-        bool hasLeftNode = leftCoordinate.x >= 0 && _grid.GetNode(leftCoordinate).IsOccupied != true;
-        bool hasUpNode = upCoordinate.y < _grid.Height && _grid.GetNode(upCoordinate).IsOccupied != true;
-        bool hasDowntNode = downCoordinate.y >= 0 && _grid.GetNode(downCoordinate).IsOccupied != true;
-
-        if (hasRightNode)
+        if (IsRightNodeSuitable(rightCoordinate))
             yield return rightCoordinate;
-        if (hasLeftNode)
+        if (IsLeftNodeSuitable(leftCoordinate))
             yield return leftCoordinate;
-        if (hasUpNode)
+        if (IsUpNodeSuitable(upCoordinate))
             yield return upCoordinate;
-        if (hasDowntNode)
+        if (IsDownNodeSuitable(downCoordinate))
             yield return downCoordinate;
     }
 
@@ -74,28 +69,52 @@ public class FlowFieldPathfinding
         while(distance < maximumDistance)
         {
             Vector2Int rightCoordinate = coordinate + new Vector2Int(distance, 0);
-            bool hasRightNode = rightCoordinate.x < _grid.Width && _grid.GetNode(rightCoordinate).IsOccupied != true;
-            if (hasRightNode)
+            if (IsRightNodeSuitable(rightCoordinate))
                 return rightCoordinate;                    
 
             Vector2Int leftCoordinate = coordinate + new Vector2Int(-distance, 0);
-            bool hasLeftNode = leftCoordinate.x >= 0 && _grid.GetNode(leftCoordinate).IsOccupied != true;
-            if (hasLeftNode)
+            if (IsLeftNodeSuitable(leftCoordinate))
                 return leftCoordinate;              
 
             Vector2Int upCoordinate = coordinate + new Vector2Int(0, distance);
-            bool hasUpNode = upCoordinate.y < _grid.Height && _grid.GetNode(upCoordinate).IsOccupied != true;
-            if (hasUpNode)
+            if (IsUpNodeSuitable(upCoordinate))
                 return upCoordinate;               
 
             Vector2Int downCoordinate = coordinate + new Vector2Int(0, -distance);
-            bool hasDowntNode = downCoordinate.y >= 0 && _grid.GetNode(downCoordinate).IsOccupied != true;
-            if (hasDowntNode)
+            if (IsDownNodeSuitable(downCoordinate))
                 return downCoordinate;
 
             distance++;
         }
 
         return coordinate;
+    }
+
+    private bool IsRightNodeSuitable(Vector2Int rightCoordinate)
+    {
+        bool hasRightNode = rightCoordinate.x < _grid.Width && _grid.GetNode(rightCoordinate).IsOccupied != true;
+
+        return hasRightNode;
+    }
+
+    private bool IsLeftNodeSuitable(Vector2Int leftCoordinate)
+    {
+        bool hasLeftNode = leftCoordinate.x >= 0 && _grid.GetNode(leftCoordinate).IsOccupied != true;
+
+        return hasLeftNode;
+    }
+
+    private bool IsUpNodeSuitable(Vector2Int upCoordinate)
+    {
+        bool hasUpNode = upCoordinate.y < _grid.Height && _grid.GetNode(upCoordinate).IsOccupied != true;
+
+        return hasUpNode;
+    }
+
+    private bool IsDownNodeSuitable(Vector2Int downCoordinate)
+    {
+        bool hasDownNode = downCoordinate.y >= 0 && _grid.GetNode(downCoordinate).IsOccupied != true;
+
+        return hasDownNode;
     }
 }

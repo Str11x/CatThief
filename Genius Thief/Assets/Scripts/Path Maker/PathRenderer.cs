@@ -16,7 +16,7 @@ public class PathRenderer : MonoBehaviour
     private float _height = 0.1f;
     private int _lastIndexInPastPath = 0;
 
-    public event Action AddedMarker;
+    public event Action MarkerAdded;
 
     private void Start()
     {
@@ -52,7 +52,7 @@ public class PathRenderer : MonoBehaviour
         newMarker.AddStep(_markers.Count + 1);
 
         _markers.Add(newMarker);
-        AddedMarker?.Invoke();
+        MarkerAdded?.Invoke();
     }
 
     public void RealTimeDrawPath()

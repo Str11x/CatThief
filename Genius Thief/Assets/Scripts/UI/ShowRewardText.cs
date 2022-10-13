@@ -13,14 +13,14 @@ public class ShowRewardText : MonoBehaviour
 
     private void Awake()
     {
-        _lootService.PickedupLoot += EnableRandomTextMessage;
+        _lootService.LootPickedup += EnableRandomTextMessage;
 
         _messages = GetComponentsInChildren<TMP_Text>(true);
     }
 
     private void OnDisable()
     {
-        _lootService.PickedupLoot -= EnableRandomTextMessage;
+        _lootService.LootPickedup -= EnableRandomTextMessage;
     }
 
     private void EnableRandomTextMessage()

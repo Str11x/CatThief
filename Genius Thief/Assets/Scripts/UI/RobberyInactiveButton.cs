@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +8,13 @@ public class RobberyInactiveButton : MonoBehaviour
 
     private void Start()
     {
-        PlayerMovementAgent.StartedRobbery += DisableButton;
+        PlayerMovementAgent.RobberyStarted += DisableButton;
         _button = GetComponent<Button>();
     }
 
     private void OnDestroy()
     {
-        PlayerMovementAgent.StartedRobbery -= DisableButton;
+        PlayerMovementAgent.RobberyStarted -= DisableButton;
     }
 
     private void DisableButton()
